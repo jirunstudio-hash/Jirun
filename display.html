@@ -5,16 +5,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Display Studio - TikTok Live</title>
-
 <style>
 *{
 box-sizing:border-box;
 margin:0;
 padding:0;
-font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
 -webkit-font-smoothing:antialiased;
 }
-
 html,body{
 width:100%;
 height:100%;
@@ -22,31 +20,31 @@ overflow:hidden;
 background:#000;
 color:#fff;
 }
-
 body{
 display:flex;
 justify-content:center;
-align-items:flex-start;
+align-items:center;
 }
 
+/* KANVAS POTRET 9:16 */
 .phone-screen{
-width:100vw;
-height:100vh;
-max-width:none;
+width:min(100vw,56.25vh);
+height:min(100vh,177.7778vw);
+aspect-ratio:9/16;
 position:relative;
 overflow:hidden;
 display:block;
 background:#000;
-padding:4.4vh 1vw 0;
+padding:4.4% 1% 0;
+flex:none;
 }
 
-/* LAYOUT POTRET HOST + 8 PERMINTAAN */
-
+/* SUSUNAN HOST DAN PERMINTAAN */
 .display-grid{
 width:100%;
-height:54vh;
-min-height:320px;
-max-height:860px;
+height:54%;
+min-height:0;
+max-height:54%;
 display:grid;
 grid-template-columns:minmax(0,1fr) minmax(0,1fr);
 gap:6px;
@@ -54,13 +52,11 @@ position:relative;
 z-index:2;
 }
 
-/* KOTAK HOST BESAR */
-
+/* HOST BESAR */
 .host-fullscreen{
 position:relative;
 width:100%;
 height:100%;
-aspect-ratio:auto;
 min-width:0;
 min-height:0;
 z-index:2;
@@ -74,18 +70,16 @@ justify-content:center;
 align-items:center;
 animation:none;
 }
-
 @keyframes hostBlueBlink{
 0%,100%{
 border-color:rgba(22,140,255,.35);
-box-shadow:0 0 3px rgba(22,140,255,.25),inset 0 0 2px rgba(22,140,255,.12);
+box-shadow:0 0 3px rgba(22,140,255,.25);
 }
 50%{
 border-color:#168cff;
-box-shadow:0 0 7px rgba(22,140,255,.95),0 0 15px rgba(22,140,255,.65),inset 0 0 7px rgba(22,140,255,.25);
+box-shadow:0 0 15px rgba(22,140,255,.65);
 }
 }
-
 .unmute-hint{
 position:absolute;
 bottom:10px;
@@ -101,7 +95,6 @@ border-radius:999px;
 display:none;
 pointer-events:none;
 }
-
 .host-video{
 position:absolute;
 inset:0;
@@ -111,13 +104,9 @@ object-fit:cover;
 z-index:2;
 display:none;
 backface-visibility:hidden;
-filter:none;
 transition:opacity .22s ease-in-out;
 }
-
-.host-placeholder{
-display:none;
-}
+.host-placeholder{display:none;}
 
 .gift-overlay{
 position:absolute;
@@ -129,22 +118,12 @@ pointer-events:none;
 display:none;
 opacity:0;
 background:transparent;
-transition:opacity .22s cubic-bezier(.25,1,.5,1);
+transition:opacity .22s ease;
 will-change:opacity;
 }
-
-.gift-overlay.visible{
-opacity:1;
-}
-
-.gift-bottom-backdrop{
-display:none;
-}
-
-#giftVideo{
-display:none;
-}
-
+.gift-overlay.visible{opacity:1;}
+.gift-bottom-backdrop{display:none;}
+#giftVideo{display:none;}
 #giftCanvas{
 position:absolute;
 inset:0;
@@ -156,12 +135,10 @@ display:block;
 pointer-events:none;
 transform:translateZ(0);
 backface-visibility:hidden;
-image-rendering:-webkit-optimize-contrast;
 z-index:2;
 }
 
-/* AREA 8 KOTAK PERMINTAAN */
-
+/* AREA PERMINTAAN */
 .live-layout{
 position:relative;
 z-index:10;
@@ -175,6 +152,7 @@ grid-row:1;
 pointer-events:none;
 }
 
+/* 2 KOLOM X 4 BARIS */
 .komal-grid{
 width:100%;
 height:100%;
@@ -186,13 +164,11 @@ pointer-events:auto;
 }
 
 /* KOTAK PERMINTAAN */
-
 .slot-box{
 width:100%;
 height:100%;
 min-width:0;
 min-height:0;
-aspect-ratio:auto;
 background:#242424;
 border:0;
 border-radius:14px;
@@ -204,21 +180,14 @@ align-items:center;
 justify-content:center;
 contain:layout paint;
 box-shadow:none;
-transition:
-border-color .2s ease,
-background .2s ease,
-box-shadow .2s ease;
+transition:background .2s ease;
 }
-
 .slot-box.has-photo{
 background:#191a21;
 border:1px solid rgba(255,255,255,.20);
-box-shadow:
-0 2px 7px rgba(0,0,0,.4),
-inset 0 0 0 1px rgba(255,255,255,.025);
+box-shadow:0 2px 7px rgba(0,0,0,.4);
 animation:none!important;
 }
-
 .slot-bg-blur{
 position:absolute!important;
 inset:-8px!important;
@@ -230,23 +199,19 @@ display:none;
 z-index:1;
 pointer-events:none;
 }
-
 .slot-bg-overlay{
 position:absolute;
 inset:0;
 background:linear-gradient(
 180deg,
-rgba(0,0,0,.12) 0%,
+rgba(0,0,0,.12),
 rgba(0,0,0,.08) 45%,
-rgba(0,0,0,.38) 100%
+rgba(0,0,0,.38)
 );
 display:none;
 z-index:2;
 pointer-events:none;
 }
-
-/* IKON TAMBAH */
-
 .slot-plus-svg{
 width:25px;
 height:25px;
@@ -256,9 +221,6 @@ stroke-linecap:round;
 z-index:3;
 margin-bottom:6px;
 }
-
-/* TULISAN PERMINTAAN */
-
 .slot-req{
 color:#b8bbc5;
 font-size:.70rem;
@@ -267,9 +229,6 @@ letter-spacing:.1px;
 z-index:3;
 text-shadow:0 1px 3px rgba(0,0,0,.8);
 }
-
-/* FOTO PROFIL */
-
 .slot-circle-img{
 width:56px;
 height:56px;
@@ -286,7 +245,6 @@ box-shadow:none!important;
 }
 
 /* BADGE KOIN */
-
 .slot-coin-badge{
 position:absolute;
 top:5px;
@@ -302,7 +260,6 @@ border-radius:999px;
 z-index:6;
 box-shadow:0 2px 6px rgba(0,0,0,.4);
 }
-
 .cyan-diamond-circle{
 width:15px;
 height:15px;
@@ -315,9 +272,7 @@ align-items:center;
 justify-content:center;
 flex-shrink:0;
 overflow:hidden;
-box-shadow:0 0 0 1px rgba(255,255,255,.2);
 }
-
 .star-svg{
 width:100%;
 height:100%;
@@ -325,25 +280,22 @@ display:flex;
 align-items:center;
 justify-content:center;
 color:#fff;
-font-family:Arial,Helvetica,sans-serif;
+font-family:Arial,sans-serif;
 font-size:11px;
 font-weight:400;
 line-height:1;
 text-align:center;
 }
-
 .coin-count{
-font-family:Arial,Helvetica,sans-serif;
+font-family:Arial,sans-serif;
 font-size:10px;
 font-weight:500;
 color:#fff;
-letter-spacing:0;
 line-height:1;
 white-space:nowrap;
 }
 
 /* BADGE GIFT */
-
 .slot-top-badge{
 position:absolute;
 top:5px;
@@ -357,14 +309,12 @@ filter:drop-shadow(0 2px 5px rgba(0,0,0,.85));
 pointer-events:none;
 animation:popGiftBadge .3s ease-out;
 }
-
 @keyframes popGiftBadge{
 0%{transform:scale(.5);opacity:0}
 100%{transform:scale(1);opacity:1}
 }
 
 /* NAMA MEMBER */
-
 .slot-name-pill{
 position:absolute;
 bottom:5px;
@@ -382,7 +332,6 @@ border-radius:999px;
 min-height:21px;
 box-shadow:0 1px 4px rgba(0,0,0,.25);
 }
-
 .slot-name-text{
 color:#fff;
 font-size:10px;
@@ -392,7 +341,6 @@ overflow:hidden;
 text-overflow:ellipsis;
 max-width:58px;
 }
-
 .slot-plus-circle{
 width:13px;
 height:13px;
@@ -403,14 +351,12 @@ align-items:center;
 justify-content:center;
 flex-shrink:0;
 }
-
 .slot-pill-plus-svg{
 width:7px;
 height:7px;
 }
 
 /* MIKROFON */
-
 .mic-container{
 position:absolute;
 bottom:5px;
@@ -427,23 +373,19 @@ border-radius:0!important;
 box-shadow:none!important;
 backdrop-filter:none!important;
 }
-
 .mic-icon-svg{
 width:13px;
 height:13px;
 display:block;
 filter:drop-shadow(0 1px 2px rgba(0,0,0,.7));
 }
-
 .mic-icon-svg .mic-body{fill:#fff}
-
 .mic-icon-svg .mic-slash-bg{
 stroke:#000;
 stroke-width:4.6;
 stroke-linecap:round;
 display:block;
 }
-
 .mic-icon-svg .mic-slash{
 stroke:#fff;
 stroke-width:2.6;
@@ -451,12 +393,10 @@ stroke-linecap:round;
 display:block;
 filter:drop-shadow(0 1px 2px rgba(0,0,0,.95));
 }
-
 .mic-container.is-unmuted .mic-icon-svg .mic-slash,
 .mic-container.is-unmuted .mic-icon-svg .mic-slash-bg{
 display:none;
 }
-
 .mic-container.is-muted{
 background:transparent!important;
 border:none!important;
@@ -464,29 +404,15 @@ box-shadow:none!important;
 }
 
 /* RESPONSIVE */
-
 @media(max-width:360px){
-.display-grid{
-gap:5px;
-}
-
-.komal-grid{
-gap:5px;
-}
-
-.slot-box{
-border-radius:10px;
-}
-
-.host-fullscreen{
-border-radius:10px;
-}
-
+.display-grid{gap:5px;}
+.komal-grid{gap:5px;}
+.slot-box{border-radius:10px;}
+.host-fullscreen{border-radius:10px;}
 .slot-circle-img{
 width:48px;
 height:48px;
 }
-
 .slot-name-text{
 max-width:48px;
 font-size:9px;
@@ -497,17 +423,13 @@ font-size:9px;
 
 <body>
 <div class="phone-screen" id="displayContainer">
-
 <div class="display-grid">
 
 <div class="host-fullscreen" id="hostBox" onclick="handleHostBoxClick()">
-
 <div id="unmuteHint" class="unmute-hint">🔊 Ketuk untuk nyalakan suara</div>
 <div id="hostPlaceholder" class="host-placeholder"></div>
-
 <video id="hostVideo" class="host-video" autoplay playsinline preload="auto"></video>
 <video id="hostVideo2" class="host-video" playsinline preload="auto"></video>
-
 </div>
 
 <div class="live-layout">
@@ -521,7 +443,6 @@ font-size:9px;
 <video id="giftVideo" playsinline webkit-playsinline muted crossorigin="anonymous" preload="auto"></video>
 <canvas id="giftCanvas"></canvas>
 </div>
-
 </div>
 
 <script>
@@ -533,7 +454,6 @@ const badgeTimers = {};
 const slotMuteStates = {};
 
 let hostMediaObjectURL = null;
-
 let activeHostVid = 1;
 let hostLoopActive = false;
 let hostAudioWanted = true;
@@ -546,44 +466,32 @@ const $ = id => document.getElementById(id);
 const komalGrid = $('komalGrid');
 
 /* PENGATURAN VOLUME HOST */
-
 const HOST_VOLUME_NORMAL = 1.0;
 const HOST_VOLUME_DURING_GIFT = 0.5;
-
 let giftVolumeDucked = false;
 
 function setHostVolume(volume){
 const v1=$('hostVideo');
 const v2=$('hostVideo2');
-
 [v1,v2].forEach(video=>{
-if(video){
-video.volume=volume;
-}
+if(video)video.volume=volume;
 });
 }
-
 function lowerHostVolumeForGift(){
 giftVolumeDucked=true;
 setHostVolume(HOST_VOLUME_DURING_GIFT);
 }
-
 function restoreHostVolumeAfterGift(){
 giftVolumeDucked=false;
 setHostVolume(HOST_VOLUME_NORMAL);
 }
-
 function getCurrentHostVolume(){
-return giftVolumeDucked
-?HOST_VOLUME_DURING_GIFT
-:HOST_VOLUME_NORMAL;
+return giftVolumeDucked?HOST_VOLUME_DURING_GIFT:HOST_VOLUME_NORMAL;
 }
 
-/* BUAT 8 SLOT */
-
+/* BUAT 8 SLOT PERMINTAAN */
 for(let i=1;i<=8;i++){
 slotPoints[i]=0;
-
 komalGrid.insertAdjacentHTML('beforeend',`
 <div class="slot-box" id="slot-${i}">
 <img id="bg-slot-${i}" class="slot-bg-blur" referrerpolicy="no-referrer">
@@ -626,57 +534,47 @@ komalGrid.insertAdjacentHTML('beforeend',`
 `);
 }
 
-/* KLIK HOST UNTUK SUARA */
-
+/* SUARA HOST */
 function handleHostBoxClick(){
 if(!hostLoopActive)return;
-
 hostAudioWanted=true;
 
 const v1=$('hostVideo');
 const v2=$('hostVideo2');
-
 const activeVid=activeHostVid===1?v1:v2;
 const inactiveVid=activeHostVid===1?v2:v1;
 
 activeVid.muted=false;
 activeVid.volume=getCurrentHostVolume();
-
 inactiveVid.muted=true;
 inactiveVid.volume=getCurrentHostVolume();
 
 if(activeVid.paused)activeVid.play().catch(()=>{});
-
 $('unmuteHint').style.display='none';
 }
 
 function getMuteStatus(data){
 const keys=['isMuted','is_mute','mute','muted','isMicMuted','micMuted','is_mic_muted'];
-
 for(const key of keys){
 if(Object.prototype.hasOwnProperty.call(data,key)){
 const value=data[key];
-
 if(typeof value==='boolean')return value;
 if(value===1||value==='1'||value==='true'||value==='muted')return true;
 if(value===0||value==='0'||value==='false'||value==='unmuted')return false;
 }
 }
-
 return null;
 }
 
 function updateMicStatus(slotNum,status){
 const mic=$(`mic-slot-${slotNum}`);
 if(!mic||status===null||status===undefined)return;
-
 slotMuteStates[slotNum]=Boolean(status);
 mic.classList.toggle('is-unmuted',!Boolean(status));
 mic.title=status?'Mikrofon dimatikan (Muted)':'Mikrofon aktif';
 }
 
 /* LOOP VIDEO HOST */
-
 function setupSeamlessHostVideo(url){
 stopHostSeamlessLoop();
 
@@ -690,21 +588,16 @@ v2.src=url;
 
 v1.loop=false;
 v2.loop=false;
-
 v1.muted=false;
 v1.volume=getCurrentHostVolume();
-
 v2.muted=true;
 v2.volume=getCurrentHostVolume();
 
 hostAudioWanted=true;
-
 v1.style.display='block';
 v2.style.display='block';
-
 v1.style.opacity='1';
 v2.style.opacity='0';
-
 v1.style.zIndex='3';
 v2.style.zIndex='2';
 
@@ -724,7 +617,6 @@ let switching=false;
 
 const switchToNext=()=>{
 if(!hostLoopActive||switching)return;
-
 switching=true;
 
 const current=activeHostVid===1?v1:v2;
@@ -736,13 +628,10 @@ next.volume=getCurrentHostVolume();
 
 next.play().then(()=>{
 current.muted=true;
-
 next.style.zIndex='3';
 current.style.zIndex='2';
-
 next.style.opacity='1';
 current.style.opacity='0';
-
 activeHostVid=activeHostVid===1?2:1;
 
 setTimeout(()=>{
@@ -752,7 +641,6 @@ current.currentTime=0;
 }
 switching=false;
 },240);
-
 }).catch(()=>{
 switching=false;
 });
@@ -760,29 +648,23 @@ switching=false;
 
 const handleTimeUpdate=(ev)=>{
 if(!hostLoopActive)return;
-
 const current=activeHostVid===1?v1:v2;
 if(ev.target!==current)return;
 
 if(current.duration&&Number.isFinite(current.duration)){
 const timeLeft=current.duration-current.currentTime;
-
-if(timeLeft<=0.20&&!switching){
-switchToNext();
-}
+if(timeLeft<=0.20&&!switching)switchToNext();
 }
 };
 
 const handleEnded=(ev)=>{
 if(!hostLoopActive)return;
-
 const current=activeHostVid===1?v1:v2;
 if(ev.target===current)switchToNext();
 };
 
 v1.ontimeupdate=handleTimeUpdate;
 v2.ontimeupdate=handleTimeUpdate;
-
 v1.onended=handleEnded;
 v2.onended=handleEnded;
 }
@@ -796,20 +678,17 @@ const v2=$('hostVideo2');
 
 [v1,v2].forEach((v,index)=>{
 if(!v)return;
-
 v.ontimeupdate=null;
 v.onended=null;
 v.pause();
 v.removeAttribute('src');
 v.load();
-
 v.style.opacity=index===0?'1':'0';
 v.style.display='none';
 });
 }
 
 /* WEBGL VIDEO GIFT */
-
 let gl=null;
 let glProgram=null;
 let glTexture=null;
@@ -829,7 +708,6 @@ stencil:false,
 preserveDrawingBuffer:false,
 powerPreference:'high-performance'
 });
-
 if(!gl)return false;
 
 gl.disable(gl.BLEND);
@@ -855,12 +733,10 @@ float maxC=max(c.r,max(c.g,c.b));
 float greenAmount=smoothstep(0.08,0.28,gDiff);
 float blackAmount=1.0-smoothstep(0.025,0.085,maxC);
 float alpha=1.0-max(greenAmount,blackAmount);
-
 if(gDiff>0.0&&c.g>maxRB){
 float spill=clamp(gDiff*1.8,0.0,0.75);
 c.g=mix(c.g,maxRB,spill);
 }
-
 c.a=alpha;
 gl_FragColor=c;
 }`;
@@ -869,39 +745,33 @@ function createShader(type,src){
 const shader=gl.createShader(type);
 gl.shaderSource(shader,src);
 gl.compileShader(shader);
-
 if(!gl.getShaderParameter(shader,gl.COMPILE_STATUS)){
 gl.deleteShader(shader);
 return null;
 }
-
 return shader;
 }
 
 const vs=createShader(gl.VERTEX_SHADER,vsSource);
 const fs=createShader(gl.FRAGMENT_SHADER,fsSource);
-
 if(!vs||!fs)return false;
 
 glProgram=gl.createProgram();
 gl.attachShader(glProgram,vs);
 gl.attachShader(glProgram,fs);
 gl.linkProgram(glProgram);
-
 gl.deleteShader(vs);
 gl.deleteShader(fs);
 
 if(!gl.getProgramParameter(glProgram,gl.LINK_STATUS))return false;
 
 const posBuffer=gl.createBuffer();
-
 gl.bindBuffer(gl.ARRAY_BUFFER,posBuffer);
 gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([
 -1,-1,1,-1,-1,1,-1,1,1,-1,1,1
 ]),gl.STATIC_DRAW);
 
 const texBuffer=gl.createBuffer();
-
 gl.bindBuffer(gl.ARRAY_BUFFER,texBuffer);
 gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([
 0,1,1,1,0,0,0,0,1,1,1,0
@@ -911,7 +781,6 @@ glBuffers.pos=posBuffer;
 glBuffers.tex=texBuffer;
 
 glTexture=gl.createTexture();
-
 gl.bindTexture(gl.TEXTURE_2D,glTexture);
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
@@ -920,33 +789,26 @@ gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
 
 gl.useProgram(glProgram);
 gl.uniform1i(gl.getUniformLocation(glProgram,'u_tex'),0);
-
 isWebGLSupported=true;
 return true;
-
 }catch(e){
 return false;
 }
 }
 
 /* DATABASE ASSETS */
-
 const DB_NAME="TikTokStudioStorageDB";
 const STORE_NAME="permanent_assets";
-
 let dbPromise=null;
 
 function openDB(){
 if(dbPromise)return dbPromise;
-
 dbPromise=new Promise(resolve=>{
 const req=indexedDB.open(DB_NAME,1);
-
 req.onsuccess=()=>resolve(req.result);
 req.onerror=()=>{dbPromise=null;resolve(null);};
 req.onblocked=()=>{dbPromise=null;resolve(null);};
 });
-
 return dbPromise;
 }
 
@@ -954,15 +816,12 @@ async function getSavedVideo(id){
 try{
 const db=await openDB();
 if(!db)return null;
-
 return await new Promise(resolve=>{
 const tx=db.transaction(STORE_NAME,"readonly");
 const req=tx.objectStore(STORE_NAME).get(`video_${id}`);
-
 req.onsuccess=()=>resolve(req.result);
 req.onerror=()=>resolve(null);
 });
-
 }catch(e){
 return null;
 }
@@ -970,19 +829,15 @@ return null;
 
 function formatPoin(val){
 const number=Number(val);
-
 if(!Number.isFinite(number)||number<=0)return '0';
 if(number>=1000000)return(number/1000000).toFixed(1)+'M';
 if(number>=1000)return(number/1000).toFixed(1)+'K';
-
 return Math.floor(number).toString();
 }
 
 /* UPDATE SLOT */
-
 function updateSlotDisplay(data){
 const{slotNum,nameInput,initialPoin,profileImg,action}=data;
-
 const slotBox=$(`slot-${slotNum}`);
 if(!slotBox)return;
 
@@ -1000,43 +855,33 @@ const topBadge=$(`topbadge-slot-${slotNum}`);
 
 if(action==='clear_slot'){
 slotBox.classList.remove('has-photo');
-
 img.style.display='none';
 img.removeAttribute('src');
-
 bg.style.display='none';
 bg.removeAttribute('src');
-
 bgOverlay.style.display='none';
 slotBox.style.background='';
-
 icon.style.display='block';
 req.style.display='inline-block';
-
 namePill.style.display='none';
 mic.style.display='none';
-
 mic.classList.remove('is-unmuted');
 delete slotMuteStates[slotNum];
-
 coinBadge.style.display='none';
 
 if(topBadge){
 topBadge.style.display='none';
 topBadge.removeAttribute('src');
 }
-
 if(badgeTimers[slotNum]){
 clearTimeout(badgeTimers[slotNum]);
 delete badgeTimers[slotNum];
 }
-
 slotPoints[slotNum]=0;
 return;
 }
 
 if(initialPoin!==undefined)slotPoints[slotNum]=initialPoin;
-
 countElem.innerText=formatPoin(slotPoints[slotNum]);
 coinBadge.style.display='flex';
 
@@ -1046,7 +891,6 @@ namePill.style.display='flex';
 mic.style.display='flex';
 
 const muteStatus=getMuteStatus(data);
-
 if(muteStatus!==null){
 updateMicStatus(slotNum,muteStatus);
 }else if(slotMuteStates[slotNum]!==undefined){
@@ -1066,30 +910,24 @@ slotBox.classList.add('has-photo');
 slotBox.style.background='#191b22';
 }
 };
-
 img.onerror=()=>{
 slotBox.classList.remove('has-photo');
 slotBox.style.background='';
 };
-
 img.src=profileImg;
 img.style.display='block';
-
 bg.src=profileImg;
 bg.style.display='block';
-
 bgOverlay.style.display='block';
 }
 }
 
 function showGiftBadgeTemporarily(slotNum,badgeSrc){
 if(!badgeSrc||!slotNum)return;
-
 const topBadge=$(`topbadge-slot-${slotNum}`);
 if(!topBadge)return;
 
 if(badgeTimers[slotNum])clearTimeout(badgeTimers[slotNum]);
-
 topBadge.src=badgeSrc;
 topBadge.style.display='block';
 
@@ -1101,46 +939,37 @@ delete badgeTimers[slotNum];
 }
 
 /* ANTRIAN VIDEO GIFT */
-
 function queueGiftVideo(src,repeatCount=1){
 if(!src)return;
-
 const count=Math.max(1,Math.min(999,Number(repeatCount)||1));
-
 giftVideoQueue.push({
 src,
 remaining:count,
 isBlob:src.startsWith('blob:')
 });
-
 playNextGiftVideo();
 }
 
 function playNextGiftVideo(){
 if(giftVideoQueueBusy)return;
-
 if(giftVideoQueue.length===0){
 restoreHostVolumeAfterGift();
 return;
 }
 
 giftVideoQueueBusy=true;
-
 const item=giftVideoQueue[0];
 
 playGiftVideo(item.src,()=>{
 item.remaining--;
-
 if(item.remaining>0){
 giftVideoQueueBusy=false;
 setTimeout(playNextGiftVideo,50);
 }else{
 giftVideoQueue.shift();
-
 if(item.isBlob){
 try{URL.revokeObjectURL(item.src);}catch(e){}
 }
-
 giftVideoQueueBusy=false;
 setTimeout(playNextGiftVideo,50);
 }
@@ -1150,29 +979,23 @@ setTimeout(playNextGiftVideo,50);
 function getGiftComboKey(data){
 const sender=String(data.senderName||data.username||'user').toLowerCase();
 const gift=String(data.giftId||data.giftTitle||'gift').toLowerCase();
-
 return`${sender}::${gift}`;
 }
 
 async function resolveGiftVideo(data){
 if(data.videoBlob)return URL.createObjectURL(data.videoBlob);
-
 if(data.giftId){
 const blob=await getSavedVideo(data.giftId);
 if(blob)return URL.createObjectURL(blob);
 }
-
 if(data.src)return data.src;
-
 return null;
 }
 
 function receiveGiftForCombo(data){
 const key=getGiftComboKey(data);
-
 const rawCumulative=data.repeatCount??data.comboCount??data.repeat_count??data.combo_count;
 const cumulativeCount=Number(rawCumulative);
-
 let group=giftComboGroups.get(key);
 
 if(!group){
@@ -1184,7 +1007,6 @@ timer:null,
 revision:0,
 videoPromise:Promise.resolve()
 };
-
 giftComboGroups.set(key,group);
 }
 
@@ -1201,25 +1023,19 @@ clearTimeout(group.timer);
 
 group.videoPromise=group.videoPromise.then(async()=>{
 const resolvedSrc=await resolveGiftVideo(data);
-
 if(resolvedSrc){
 if(group.src&&group.src.startsWith('blob:')&&group.src!==resolvedSrc){
 try{URL.revokeObjectURL(group.src);}catch(e){}
 }
-
 group.src=resolvedSrc;
 }
 }).catch(err=>console.error('Gagal memuat video gift:',err));
 
 const finishCombo=async()=>{
 const finishingRevision=group.revision;
-
 await group.videoPromise;
-
 if(giftComboGroups.get(key)!==group||group.revision!==finishingRevision)return;
-
 giftComboGroups.delete(key);
-
 if(group.src){
 queueGiftVideo(group.src,Math.max(1,group.count));
 }
@@ -1234,13 +1050,11 @@ group.timer=setTimeout(finishCombo,comboEnded?0:900);
 }
 
 /* BROADCAST CHANNEL */
-
 function handleIncomingMessage(data){
 if(!data)return;
 
 if(data.type==='SET_HOST_VIDEO'){
 releaseHostObjectURL();
-
 if(data.videoBlob){
 hostMediaObjectURL=URL.createObjectURL(data.videoBlob);
 setupSeamlessHostVideo(hostMediaObjectURL);
@@ -1250,28 +1064,21 @@ setupSeamlessHostVideo(data.src||data.videoUrl);
 $('hostPlaceholder').style.display='none';
 }
 }
-
 else if(data.type==='RESET_HOST_MEDIA'){
 stopHostSeamlessLoop();
 releaseHostObjectURL();
 $('hostPlaceholder').style.display='none';
 }
-
 else if(data.type==='UPDATE_SLOT'){
 updateSlotDisplay(data);
 }
-
 else if(data.type==='UPDATE_SLOT_MUTE'||data.type==='SLOT_MUTE_UPDATE'){
 const slotNum=Number(data.slotNum);
-
 if(slotNum>=1&&slotNum<=8){
 const status=getMuteStatus(data);
-
 if(status!==null){
 slotMuteStates[slotNum]=status;
-
 const mic=$(`mic-slot-${slotNum}`);
-
 if(mic){
 mic.style.display='flex';
 updateMicStatus(slotNum,status);
@@ -1279,38 +1086,24 @@ updateMicStatus(slotNum,status);
 }
 }
 }
-
 else if(data.type==='PLAY_GIFT'){
 const targetSlot=Number(data.targetSlot);
-
 if(targetSlot&&slotPoints[targetSlot]!==undefined){
 slotPoints[targetSlot]+=Number(data.increment||0);
-
 const countElem=$(`coincount-slot-${targetSlot}`);
-
-if(countElem){
-countElem.innerText=formatPoin(slotPoints[targetSlot]);
-}
-
+if(countElem)countElem.innerText=formatPoin(slotPoints[targetSlot]);
 const badge=$(`coin-badge-${targetSlot}`);
-
-if(badge){
-badge.style.display='flex';
+if(badge)badge.style.display='flex';
 }
-}
-
 if(data.badgeImg){
 showGiftBadgeTemporarily(targetSlot,data.badgeImg);
 }
-
 receiveGiftForCombo(data);
 }
 }
-
 channel.onmessage=event=>handleIncomingMessage(event.data);
 
 /* WEBSOCKET */
-
 let ws=null;
 let reconnectTimer=null;
 let reconnectDelay=1000;
@@ -1318,12 +1111,10 @@ let manuallyClosed=false;
 
 function connectWebSocket(){
 if(manuallyClosed)return;
-
 if(ws&&(ws.readyState===WebSocket.CONNECTING||ws.readyState===WebSocket.OPEN))return;
 
 try{
 const protocol=location.protocol==='https:'?'wss:':'ws:';
-
 ws=new WebSocket(`${protocol}//${location.host||'localhost:8081'}`);
 
 ws.onopen=()=>{
@@ -1333,7 +1124,6 @@ reconnectDelay=1000;
 ws.onmessage=event=>{
 try{
 const d=JSON.parse(event.data);
-
 if(d.type==='gift'){
 handleIncomingMessage({
 type:'PLAY_GIFT',
@@ -1351,33 +1141,25 @@ videoBlob:d.videoBlob,
 src:d.src||d.videoUrl||d.video_url||''
 });
 }
-
 }catch(err){}
 };
 
 ws.onerror=()=>{};
-
 ws.onclose=()=>{
 ws=null;
-
 if(manuallyClosed)return;
-
 clearTimeout(reconnectTimer);
-
 reconnectTimer=setTimeout(connectWebSocket,reconnectDelay);
 reconnectDelay=Math.min(reconnectDelay*1.5,10000);
 };
-
 }catch(err){
 clearTimeout(reconnectTimer);
 reconnectTimer=setTimeout(connectWebSocket,reconnectDelay);
 }
 }
-
 connectWebSocket();
 
 /* RENDERER VIDEO GIFT */
-
 let glReady=false;
 let renderActive=false;
 let renderFrameId=null;
@@ -1389,42 +1171,33 @@ let activeFinishHandler=null;
 const giftCanvas=$('giftCanvas');
 const giftVideo=$('giftVideo');
 const giftOverlay=$('giftOverlayContainer');
-
 let canvas2D=null;
 
 function stopGiftRenderer(){
 renderActive=false;
-
 if(renderFrameId!==null){
 cancelAnimationFrame(renderFrameId);
 renderFrameId=null;
 }
-
 if(videoFrameCallbackId!==null&&giftVideo.cancelVideoFrameCallback){
 giftVideo.cancelVideoFrameCallback(videoFrameCallbackId);
 }
-
 videoFrameCallbackId=null;
 }
 
 function renderGiftFrame(){
 if(!renderActive)return;
-
 const video=giftVideo;
-
 if(video.ended){
 if(activeFinishHandler)activeFinishHandler();
 return;
 }
-
 if(video.readyState<video.HAVE_CURRENT_DATA){
 scheduleGiftFrame();
 return;
 }
-
 if(video.currentTime!==lastVideoTime){
 lastVideoTime=video.currentTime;
-
 if(glReady&&gl){
 try{
 gl.bindTexture(gl.TEXTURE_2D,glTexture);
@@ -1436,18 +1209,15 @@ try{
 canvas2D.drawImage(video,0,0,giftCanvas.width,giftCanvas.height);
 }catch(e){}
 }
-
 if(!giftOverlay.classList.contains('visible')){
 giftOverlay.classList.add('visible');
 }
 }
-
 scheduleGiftFrame();
 }
 
 function scheduleGiftFrame(){
 if(!renderActive)return;
-
 if(giftVideo.requestVideoFrameCallback){
 videoFrameCallbackId=giftVideo.requestVideoFrameCallback(()=>{
 videoFrameCallbackId=null;
@@ -1461,41 +1231,31 @@ renderGiftFrame();
 }
 }
 
-/* PUTAR VIDEO GIFT + TURUNKAN VOLUME HOST */
-
+/* PUTAR VIDEO GIFT */
 function playGiftVideo(src,onFinished){
 const video=giftVideo;
 const canvas=giftCanvas;
 const overlay=giftOverlay;
-
 const generation=++giftVideoGeneration;
-
 let finished=false;
 let safetyTimer=null;
 
 stopGiftRenderer();
-
 lowerHostVolumeForGift();
 
 function finish(){
 if(finished)return;
-
 finished=true;
 activeFinishHandler=null;
-
 clearTimeout(safetyTimer);
-
 if(generation!==giftVideoGeneration)return;
 
 overlay.classList.remove('visible');
 
 setTimeout(()=>{
 if(generation!==giftVideoGeneration)return;
-
 stopGiftRenderer();
-
 overlay.style.display='none';
-
 video.onended=null;
 video.onerror=null;
 video.onloadedmetadata=null;
@@ -1512,22 +1272,16 @@ gl.clearColor(0,0,0,0);
 gl.clear(gl.COLOR_BUFFER_BIT);
 }catch(e){}
 }
-
 if(canvas2D){
 try{
 canvas2D.clearRect(0,0,canvas.width,canvas.height);
 }catch(e){}
 }
-
-if(typeof onFinished==='function'){
-onFinished();
-}
-
+if(typeof onFinished==='function')onFinished();
 },200);
 }
 
 activeFinishHandler=finish;
-
 overlay.style.display='block';
 overlay.classList.remove('visible');
 
@@ -1540,17 +1294,13 @@ video.load();
 video.src=src;
 video.muted=false;
 video.volume=1;
-
 video.onended=finish;
 video.onerror=finish;
 
 glReady=initWebGL(canvas);
 canvas2D=null;
-
 if(!glReady){
-try{
-canvas2D=canvas.getContext('2d');
-}catch(e){}
+try{canvas2D=canvas.getContext('2d');}catch(e){}
 }
 
 safetyTimer=setTimeout(()=>{
@@ -1562,9 +1312,7 @@ if(finished||generation!==giftVideoGeneration)return;
 
 const originalWidth=video.videoWidth||1080;
 const originalHeight=video.videoHeight||1920;
-
 const scale=Math.min(1,1080/originalWidth,1920/originalHeight);
-
 const renderWidth=Math.max(1,Math.round(originalWidth*scale));
 const renderHeight=Math.max(1,Math.round(originalHeight*scale));
 
@@ -1573,7 +1321,6 @@ canvas.height=renderHeight;
 
 if(video.duration&&Number.isFinite(video.duration)){
 clearTimeout(safetyTimer);
-
 safetyTimer=setTimeout(()=>{
 if(!finished)finish();
 },(video.duration*1000)+1500);
@@ -1584,59 +1331,45 @@ gl.viewport(0,0,renderWidth,renderHeight);
 gl.useProgram(glProgram);
 
 const posLoc=gl.getAttribLocation(glProgram,'a_pos');
-
 gl.bindBuffer(gl.ARRAY_BUFFER,glBuffers.pos);
 gl.enableVertexAttribArray(posLoc);
 gl.vertexAttribPointer(posLoc,2,gl.FLOAT,false,0,0);
 
 const texLoc=gl.getAttribLocation(glProgram,'a_tex');
-
 gl.bindBuffer(gl.ARRAY_BUFFER,glBuffers.tex);
 gl.enableVertexAttribArray(texLoc);
 gl.vertexAttribPointer(texLoc,2,gl.FLOAT,false,0,0);
 
 gl.activeTexture(gl.TEXTURE0);
 gl.bindTexture(gl.TEXTURE_2D,glTexture);
-
 gl.clearColor(0,0,0,0);
 gl.clear(gl.COLOR_BUFFER_BIT);
-
 }else if(canvas2D){
 canvas2D.clearRect(0,0,renderWidth,renderHeight);
 }
 
 lastVideoTime=-1;
-
 try{
 await video.play();
-
 if(finished||generation!==giftVideoGeneration)return;
-
 renderActive=true;
 renderGiftFrame();
-
 }catch(err){
 video.muted=true;
-
 try{
 await video.play();
-
 if(finished||generation!==giftVideoGeneration)return;
-
 renderActive=true;
 renderGiftFrame();
-
 }catch(error){
 finish();
 }
 }
 };
-
 video.load();
 }
 
 /* CLEANUP */
-
 function releaseHostObjectURL(){
 if(hostMediaObjectURL){
 URL.revokeObjectURL(hostMediaObjectURL);
@@ -1646,7 +1379,6 @@ hostMediaObjectURL=null;
 
 window.addEventListener('pagehide',()=>{
 manuallyClosed=true;
-
 stopGiftRenderer();
 stopHostSeamlessLoop();
 
@@ -1654,7 +1386,6 @@ if(ws){
 ws.close();
 ws=null;
 }
-
 clearTimeout(reconnectTimer);
 
 for(const timer of Object.values(badgeTimers)){
@@ -1663,12 +1394,10 @@ clearTimeout(timer);
 
 for(const group of giftComboGroups.values()){
 clearTimeout(group.timer);
-
 if(group.src?.startsWith('blob:')){
 URL.revokeObjectURL(group.src);
 }
 }
-
 giftComboGroups.clear();
 
 giftVideoQueue.forEach(item=>{
@@ -1676,9 +1405,7 @@ if(item.isBlob){
 URL.revokeObjectURL(item.src);
 }
 });
-
 giftVideoQueue.length=0;
-
 releaseHostObjectURL();
 channel.close();
 });
