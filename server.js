@@ -13,11 +13,7 @@ const PORT = process.env.PORT || 8080;
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/health', (req, res) => {
-    res.json({
-        status: 'online',
-        service: 'NUSANTARA LIVE',
-        websocket: 'enabled'
-    });
+    res.json({ status: 'online' });
 });
 
 const wss = new WebSocket.Server({
@@ -25,71 +21,62 @@ const wss = new WebSocket.Server({
     maxPayload: 150 * 1024 * 1024
 });
 
-function broadcast(data, sender) {
-    const message = JSON.stringify(data);
+wss.on('connection', socket => {
+    console.log('Client terhubung');
 
-    for (const client of wss.clients) {
-        if (
-            client !== sender &&
-            client.readyState === WebSocket.OPEN
-        ) {
-            client.send(message);
-        }
-    }
-}
-
-wss.on('connection', (ws, req) => {
-    console.log('Client terhubung:', req.socket.remoteAddress);
-
-    ws.send(JSON.stringify({
-        type: 'SERVER_CONNECTED',
-        message: 'Berhasil terhubung ke NUSANTARA LIVE'
+    socket.send(JSON.stringify({
+        type: 'SERVER_CONNECTED'
     }));
 
-    ws.on('message', (raw) => {
+    socket.on('message', (message, isBinary) => {
+        if (isBinary) return;
+
+        let data;
+
         try {
-            const data = JSON.parse(raw.toString());
-
-            if (!data || typeof data.type !== 'string') {
-                return;
-            }
-
-            const allowedTypes = [
-                'SET_HOST_VIDEO',
-                'RESET_HOST_MEDIA',
-                'PLAY_GIFT',
-                'UPDATE_SLOT',
-                'UPDATE_SLOT_MUTE',
-                'SLOT_MUTE_UPDATE',
-                'PLAY_SOUND',
-                'STOP_SOUND'
-            ];
-
-            if (!allowedTypes.includes(data.type)) {
-                return;
-            }
-
-            broadcast(data, ws);
-
-            console.log('Perintah diteruskan:', data.type);
-
-        } catch (error) {
-            console.error('Pesan tidak valid:', error.message);
+            data = JSON.parse(message.toString());
+        } catch {
+            return;
         }
+
+        if (!data || typeof data.type !== 'string') return;
+
+        const allowed = [
+            'SET_HOST_VIDEO',
+            'RESET_HOST_MEDIA',
+            'PLAY_GIFT',
+            'UPDATE_SLOT',
+            'UPDATE_SLOT_MUTE',
+            'SLOT_MUTE_UPDATE',
+            'PLAY_SOUND',
+            'STOP_SOUND'
+        ];
+
+        if (!allowed.includes(data.type)) return;
+
+        const outgoing = JSON.stringify(data);
+
+        for (const client of wss.clients) {
+            if (
+                client !== socket &&
+                client.readyState === WebSocket.OPEN
+            ) {
+                client.send(outgoing);
+            }
+        }
+
+        console.log('Perintah diteruskan:', data.type);
     });
 
-    ws.on('close', () => {
+    socket.on('close', () => {
         console.log('Client terputus');
     });
 
-    ws.on('error', (error) => {
-        console.error('WebSocket error:', error.message);
+    socket.on('error', error => {
+        console.error('WebSocket:', error.message);
     });
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-    console.log('================================');
-    console.log(' NUSANTARA LIVE SERVER ONLINE');
-    console.log(' Port:', PORT);
-    console.log('================================');
+    console.log('NUSANTARA LIVE aktif pada port ' + PORT);
 });
