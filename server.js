@@ -13,7 +13,10 @@ const PORT = process.env.PORT || 8080;
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/health', (req, res) => {
-    res.json({ status: 'online' });
+    res.json({
+        status: 'online',
+        service: 'NUSANTARA LIVE'
+    });
 });
 
 const wss = new WebSocket.Server({
@@ -22,26 +25,29 @@ const wss = new WebSocket.Server({
 });
 
 wss.on('connection', socket => {
-    console.log('Client terhubung');
+
+    console.log('Client terhubung. Total:', wss.clients.size);
 
     socket.send(JSON.stringify({
         type: 'SERVER_CONNECTED'
     }));
 
     socket.on('message', (message, isBinary) => {
+
         if (isBinary) return;
 
         let data;
 
         try {
             data = JSON.parse(message.toString());
-        } catch {
+        } catch (error) {
+            console.log('Pesan JSON tidak valid');
             return;
         }
 
         if (!data || typeof data.type !== 'string') return;
 
-        const allowed = [
+        const allowedTypes = [
             'SET_HOST_VIDEO',
             'RESET_HOST_MEDIA',
             'PLAY_GIFT',
@@ -52,31 +58,40 @@ wss.on('connection', socket => {
             'STOP_SOUND'
         ];
 
-        if (!allowed.includes(data.type)) return;
+        if (!allowedTypes.includes(data.type)) return;
 
         const outgoing = JSON.stringify(data);
 
         for (const client of wss.clients) {
+
             if (
                 client !== socket &&
                 client.readyState === WebSocket.OPEN
             ) {
                 client.send(outgoing);
             }
+
         }
 
         console.log('Perintah diteruskan:', data.type);
+
     });
 
     socket.on('close', () => {
-        console.log('Client terputus');
+        console.log('Client terputus. Total:', wss.clients.size);
     });
 
     socket.on('error', error => {
-        console.error('WebSocket:', error.message);
+        console.error('WebSocket error:', error.message);
     });
+
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-    console.log('NUSANTARA LIVE aktif pada port ' + PORT);
+
+    console.log('================================');
+    console.log(' NUSANTARA LIVE SERVER AKTIF');
+    console.log(' Port:', PORT);
+    console.log('================================');
+
 });
