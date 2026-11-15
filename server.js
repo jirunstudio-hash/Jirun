@@ -1,5 +1,3 @@
-'use strict';
-
 const express = require('express');
 const http = require('http');
 const WebSocket = require('ws');
@@ -12,86 +10,38 @@ const PORT = process.env.PORT || 8080;
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/health', (req, res) => {
-    res.json({
-        status: 'online',
-        service: 'NUSANTARA LIVE'
-    });
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
 const wss = new WebSocket.Server({
     server,
-    maxPayload: 150 * 1024 * 1024
+    maxPayload: 250 * 1024 * 1024
 });
 
-wss.on('connection', socket => {
+wss.on('connection', (socket) => {
+    console.log('Client terhubung');
 
-    console.log('Client terhubung. Total:', wss.clients.size);
-
-    socket.send(JSON.stringify({
-        type: 'SERVER_CONNECTED'
-    }));
-
-    socket.on('message', (message, isBinary) => {
-
-        if (isBinary) return;
-
-        let data;
-
-        try {
-            data = JSON.parse(message.toString());
-        } catch (error) {
-            console.log('Pesan JSON tidak valid');
-            return;
-        }
-
-        if (!data || typeof data.type !== 'string') return;
-
-        const allowedTypes = [
-            'SET_HOST_VIDEO',
-            'RESET_HOST_MEDIA',
-            'PLAY_GIFT',
-            'UPDATE_SLOT',
-            'UPDATE_SLOT_MUTE',
-            'SLOT_MUTE_UPDATE',
-            'PLAY_SOUND',
-            'STOP_SOUND'
-        ];
-
-        if (!allowedTypes.includes(data.type)) return;
-
-        const outgoing = JSON.stringify(data);
-
+    socket.on('message', (message) => {
         for (const client of wss.clients) {
-
             if (
                 client !== socket &&
                 client.readyState === WebSocket.OPEN
             ) {
-                client.send(outgoing);
+                client.send(message);
             }
-
         }
-
-        console.log('Perintah diteruskan:', data.type);
-
     });
 
     socket.on('close', () => {
-        console.log('Client terputus. Total:', wss.clients.size);
+        console.log('Client terputus');
     });
 
-    socket.on('error', error => {
+    socket.on('error', (error) => {
         console.error('WebSocket error:', error.message);
     });
-
 });
 
 server.listen(PORT, '0.0.0.0', () => {
-
-    console.log('================================');
-    console.log(' NUSANTARA LIVE SERVER AKTIF');
-    console.log(' Port:', PORT);
-    console.log('================================');
-
+    console.log(`Server berjalan di http://localhost:${PORT}`);
 });
