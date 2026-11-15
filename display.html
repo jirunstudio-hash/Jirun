@@ -13,7 +13,6 @@ padding:0;
 font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-serif;
 -webkit-font-smoothing:antialiased;
 }
-
 html,body{
 width:100%;
 height:100%;
@@ -21,14 +20,11 @@ overflow:hidden;
 background:#000;
 color:#fff;
 }
-
 body{
 display:flex;
 justify-content:center;
 align-items:center;
 }
-
-/* KANVAS POTRET 9:16 */
 .phone-screen{
 width:min(100vw,56.25vh);
 height:min(100vh,177.7778vw);
@@ -39,8 +35,6 @@ background:#000;
 padding:4.4% 1% 0;
 flex:none;
 }
-
-/* SUSUNAN DISPLAY */
 .display-grid{
 width:100%;
 height:54%;
@@ -52,8 +46,6 @@ gap:6px;
 position:relative;
 z-index:2;
 }
-
-/* HOST */
 .host-fullscreen{
 position:relative;
 width:100%;
@@ -70,7 +62,6 @@ display:flex;
 justify-content:center;
 align-items:center;
 }
-
 .host-video{
 position:absolute;
 inset:0;
@@ -82,11 +73,9 @@ display:none;
 backface-visibility:hidden;
 transition:opacity .22s ease-in-out;
 }
-
 .host-placeholder{
 display:none;
 }
-
 .unmute-hint{
 position:absolute;
 bottom:10px;
@@ -102,8 +91,6 @@ border-radius:999px;
 display:none;
 pointer-events:none;
 }
-
-/* GIFT OVERLAY */
 .gift-overlay{
 position:absolute;
 inset:0;
@@ -117,20 +104,15 @@ background:transparent;
 transition:opacity .22s ease;
 will-change:opacity;
 }
-
-/* PERBAIKAN: TAMPILKAN ANIMASI SAAT VIDEO BERJALAN */
 .gift-overlay.visible{
 opacity:1;
 }
-
 .gift-bottom-backdrop{
 display:none;
 }
-
 #giftVideo{
 display:none;
 }
-
 #giftCanvas{
 position:absolute;
 inset:0;
@@ -144,8 +126,6 @@ transform:translateZ(0);
 backface-visibility:hidden;
 z-index:2;
 }
-
-/* AREA PERMINTAAN */
 .live-layout{
 position:relative;
 z-index:10;
@@ -158,8 +138,6 @@ grid-column:2;
 grid-row:1;
 pointer-events:none;
 }
-
-/* 2 KOLOM X 4 BARIS */
 .komal-grid{
 width:100%;
 height:100%;
@@ -169,8 +147,6 @@ grid-template-rows:repeat(4,minmax(0,1fr));
 gap:6px;
 pointer-events:auto;
 }
-
-/* KOTAK PERMINTAAN */
 .slot-box{
 width:100%;
 height:100%;
@@ -189,13 +165,11 @@ contain:layout paint;
 box-shadow:none;
 transition:background .2s ease;
 }
-
 .slot-box.has-photo{
 background:#191a21;
 border:1px solid rgba(255,255,255,.20);
 box-shadow:0 2px 7px rgba(0,0,0,.4);
 }
-
 .slot-bg-blur{
 position:absolute!important;
 inset:-8px!important;
@@ -207,21 +181,14 @@ display:none;
 z-index:1;
 pointer-events:none;
 }
-
 .slot-bg-overlay{
 position:absolute;
 inset:0;
-background:linear-gradient(
-180deg,
-rgba(0,0,0,.12),
-rgba(0,0,0,.08) 45%,
-rgba(0,0,0,.38)
-);
+background:linear-gradient(180deg,rgba(0,0,0,.12),rgba(0,0,0,.08) 45%,rgba(0,0,0,.38));
 display:none;
 z-index:2;
 pointer-events:none;
 }
-
 .slot-plus-svg{
 width:25px;
 height:25px;
@@ -231,7 +198,6 @@ stroke-linecap:round;
 z-index:3;
 margin-bottom:6px;
 }
-
 .slot-req{
 color:#b8bbc5;
 font-size:.70rem;
@@ -240,7 +206,6 @@ letter-spacing:.1px;
 z-index:3;
 text-shadow:0 1px 3px rgba(0,0,0,.8);
 }
-
 .slot-circle-img{
 width:56px;
 height:56px;
@@ -255,8 +220,6 @@ z-index:4;
 border:none!important;
 box-shadow:none!important;
 }
-
-/* BADGE KOIN */
 .slot-coin-badge{
 position:absolute;
 top:5px;
@@ -272,7 +235,6 @@ border-radius:999px;
 z-index:6;
 box-shadow:0 2px 6px rgba(0,0,0,.4);
 }
-
 .cyan-diamond-circle{
 width:15px;
 height:15px;
@@ -286,7 +248,6 @@ justify-content:center;
 flex-shrink:0;
 overflow:hidden;
 }
-
 .star-svg{
 width:100%;
 height:100%;
@@ -300,7 +261,6 @@ font-weight:400;
 line-height:1;
 text-align:center;
 }
-
 .coin-count{
 font-family:Arial,sans-serif;
 font-size:10px;
@@ -309,8 +269,6 @@ color:#fff;
 line-height:1;
 white-space:nowrap;
 }
-
-/* BADGE GIFT */
 .slot-top-badge{
 position:absolute;
 top:5px;
@@ -324,19 +282,10 @@ filter:drop-shadow(0 2px 5px rgba(0,0,0,.85));
 pointer-events:none;
 animation:popGiftBadge .3s ease-out;
 }
-
 @keyframes popGiftBadge{
-0%{
-transform:scale(.5);
-opacity:0;
+0%{transform:scale(.5);opacity:0}
+100%{transform:scale(1);opacity:1}
 }
-100%{
-transform:scale(1);
-opacity:1;
-}
-}
-
-/* NAMA MEMBER */
 .slot-name-pill{
 position:absolute;
 bottom:5px;
@@ -354,7 +303,6 @@ border-radius:999px;
 min-height:21px;
 box-shadow:0 1px 4px rgba(0,0,0,.25);
 }
-
 .slot-name-text{
 color:#fff;
 font-size:10px;
@@ -364,7 +312,6 @@ overflow:hidden;
 text-overflow:ellipsis;
 max-width:58px;
 }
-
 .slot-plus-circle{
 width:13px;
 height:13px;
@@ -375,13 +322,10 @@ align-items:center;
 justify-content:center;
 flex-shrink:0;
 }
-
 .slot-pill-plus-svg{
 width:7px;
 height:7px;
 }
-
-/* MIKROFON */
 .mic-container{
 position:absolute;
 bottom:5px;
@@ -398,25 +342,21 @@ border-radius:0!important;
 box-shadow:none!important;
 backdrop-filter:none!important;
 }
-
 .mic-icon-svg{
 width:13px;
 height:13px;
 display:block;
 filter:drop-shadow(0 1px 2px rgba(0,0,0,.7));
 }
-
 .mic-icon-svg .mic-body{
 fill:#fff;
 }
-
 .mic-icon-svg .mic-slash-bg{
 stroke:#000;
 stroke-width:4.6;
 stroke-linecap:round;
 display:block;
 }
-
 .mic-icon-svg .mic-slash{
 stroke:#fff;
 stroke-width:2.6;
@@ -424,62 +364,37 @@ stroke-linecap:round;
 display:block;
 filter:drop-shadow(0 1px 2px rgba(0,0,0,.95));
 }
-
 .mic-container.is-unmuted .mic-icon-svg .mic-slash,
 .mic-container.is-unmuted .mic-icon-svg .mic-slash-bg{
 display:none;
 }
-
 .mic-container.is-muted{
 background:transparent!important;
 border:none!important;
 box-shadow:none!important;
 }
-
-/* RESPONSIVE */
 @media(max-width:360px){
-.display-grid{
-gap:5px;
-}
-.komal-grid{
-gap:5px;
-}
-.slot-box{
-border-radius:10px;
-}
-.host-fullscreen{
-border-radius:10px;
-}
-.slot-circle-img{
-width:48px;
-height:48px;
-}
-.slot-name-text{
-max-width:48px;
-font-size:9px;
-}
+.display-grid{gap:5px}
+.komal-grid{gap:5px}
+.slot-box{border-radius:10px}
+.host-fullscreen{border-radius:10px}
+.slot-circle-img{width:48px;height:48px}
+.slot-name-text{max-width:48px;font-size:9px}
 }
 </style>
 </head>
 
 <body>
-
 <div class="phone-screen" id="displayContainer">
 
 <div class="display-grid">
 
 <div class="host-fullscreen" id="hostBox" onclick="handleHostBoxClick()">
-
 <div id="unmuteHint" class="unmute-hint"></div>
-
 <div id="hostPlaceholder" class="host-placeholder"></div>
 
-<video id="hostVideo" class="host-video"
-autoplay playsinline muted preload="auto"></video>
-
-<video id="hostVideo2" class="host-video"
-playsinline muted preload="auto"></video>
-
+<video id="hostVideo" class="host-video" autoplay playsinline muted preload="auto"></video>
+<video id="hostVideo2" class="host-video" playsinline muted preload="auto"></video>
 </div>
 
 <div class="live-layout">
@@ -489,16 +404,9 @@ playsinline muted preload="auto"></video>
 </div>
 
 <div class="gift-overlay" id="giftOverlayContainer">
-
 <div class="gift-bottom-backdrop"></div>
-
-<video id="giftVideo"
-playsinline
-webkit-playsinline
-preload="auto"></video>
-
+<video id="giftVideo" playsinline webkit-playsinline preload="auto"></video>
 <canvas id="giftCanvas"></canvas>
-
 </div>
 
 </div>
@@ -506,32 +414,30 @@ preload="auto"></video>
 <script>
 'use strict';
 
-const channel = new BroadcastChannel('tiktok_live_channel');
+const channel=new BroadcastChannel('tiktok_live_channel');
+const slotPoints={};
+const badgeTimers={};
+const slotMuteStates={};
 
-const slotPoints = {};
-const badgeTimers = {};
-const slotMuteStates = {};
+let hostMediaObjectURL=null;
+let activeHostVid=1;
+let hostLoopActive=false;
 
-let hostMediaObjectURL = null;
-let activeHostVid = 1;
-let hostLoopActive = false;
+const giftComboGroups=new Map();
+const giftVideoQueue=[];
+let giftVideoQueueBusy=false;
 
-const giftComboGroups = new Map();
-const giftVideoQueue = [];
-let giftVideoQueueBusy = false;
+const $=id=>document.getElementById(id);
+const komalGrid=$('komalGrid');
 
-const $ = id => document.getElementById(id);
-const komalGrid = $('komalGrid');
+let giftAudioUnlocked=false;
+let pendingGiftStart=null;
 
-/* ==================================
-   AUDIO HOST SELALU MATI
-================================== */
+/* AUDIO HOST SELALU MATI */
 
 function setHostVolume(){
-const v1=$('hostVideo');
-const v2=$('hostVideo2');
-
-[v1,v2].forEach(video=>{
+['hostVideo','hostVideo2'].forEach(id=>{
+const video=$(id);
 if(video){
 video.muted=true;
 video.volume=0;
@@ -551,195 +457,98 @@ function getCurrentHostVolume(){
 return 0;
 }
 
-/* ==================================
-   BUAT 8 SLOT PERMINTAAN
-================================== */
+/* AKTIVASI AUDIO GIFT */
+
+function handleHostBoxClick(){
+setHostVolume();
+
+giftAudioUnlocked=true;
+
+$('unmuteHint').style.display='none';
+
+if(pendingGiftStart){
+const start=pendingGiftStart;
+pendingGiftStart=null;
+start();
+}
+}
+
+/* BUAT 8 SLOT */
 
 for(let i=1;i<=8;i++){
-
 slotPoints[i]=0;
 
 komalGrid.insertAdjacentHTML('beforeend',`
-
 <div class="slot-box" id="slot-${i}">
+<img id="bg-slot-${i}" class="slot-bg-blur" referrerpolicy="no-referrer">
+<div class="slot-bg-overlay" id="overlay-slot-${i}"></div>
 
-<img id="bg-slot-${i}"
-class="slot-bg-blur"
-referrerpolicy="no-referrer">
-
-<div class="slot-bg-overlay"
-id="overlay-slot-${i}"></div>
-
-<div class="slot-coin-badge"
-id="coin-badge-${i}"
-style="display:none">
-
-<div class="cyan-diamond-circle">
-<span class="star-svg">★</span>
+<div class="slot-coin-badge" id="coin-badge-${i}" style="display:none">
+<div class="cyan-diamond-circle"><span class="star-svg">★</span></div>
+<span class="coin-count" id="coincount-slot-${i}">0</span>
 </div>
 
-<span class="coin-count"
-id="coincount-slot-${i}">0</span>
+<img class="slot-top-badge" id="topbadge-slot-${i}" referrerpolicy="no-referrer" crossorigin="anonymous" alt="Gift">
 
-</div>
-
-<img class="slot-top-badge"
-id="topbadge-slot-${i}"
-referrerpolicy="no-referrer"
-crossorigin="anonymous"
-alt="Gift">
-
-<svg class="slot-plus-svg"
-id="icon-${i}"
-viewBox="0 0 24 24"
-fill="none">
-
+<svg class="slot-plus-svg" id="icon-${i}" viewBox="0 0 24 24" fill="none">
 <line x1="12" y1="5" x2="12" y2="19"></line>
 <line x1="5" y1="12" x2="19" y2="12"></line>
-
 </svg>
 
-<span class="slot-req"
-id="req-${i}">Permintaan</span>
+<span class="slot-req" id="req-${i}">Permintaan</span>
+<img id="img-slot-${i}" class="slot-circle-img" referrerpolicy="no-referrer">
 
-<img id="img-slot-${i}"
-class="slot-circle-img"
-referrerpolicy="no-referrer">
-
-<div class="slot-name-pill"
-id="namepill-slot-${i}"
-style="display:none">
-
-<span class="slot-name-text"
-id="nametext-slot-${i}">Slot ${i}</span>
-
+<div class="slot-name-pill" id="namepill-slot-${i}" style="display:none">
+<span class="slot-name-text" id="nametext-slot-${i}">Slot ${i}</span>
 <div class="slot-plus-circle">
-
-<svg class="slot-pill-plus-svg"
-viewBox="0 0 16 16"
-fill="none">
-
-<line x1="8" y1="2.5"
-x2="8" y2="13.5"
-stroke="#ffffff"
-stroke-width="2.2"
-stroke-linecap="round"></line>
-
-<line x1="2.5" y1="8"
-x2="13.5" y2="8"
-stroke="#ffffff"
-stroke-width="2.2"
-stroke-linecap="round"></line>
-
+<svg class="slot-pill-plus-svg" viewBox="0 0 16 16" fill="none">
+<line x1="8" y1="2.5" x2="8" y2="13.5" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"></line>
+<line x1="2.5" y1="8" x2="13.5" y2="8" stroke="#ffffff" stroke-width="2.2" stroke-linecap="round"></line>
 </svg>
 </div>
 </div>
 
-<div class="mic-container"
-id="mic-slot-${i}"
-style="display:none">
-
-<svg class="mic-icon-svg"
-viewBox="0 0 24 24"
-fill="none"
-aria-label="Status mikrofon">
-
-<path class="mic-body"
-d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
-
-<path class="mic-body"
-d="M19 10v1a7 7 0 0 1-6 6.93V20h3v2H8v-2h3v-2.07A7 7 0 0 1 5 11v-1h2v1a5 5 0 0 0 10 0v-1h2z"/>
-
-<line class="mic-slash-bg"
-x1="4" y1="4" x2="20" y2="20"/>
-
-<line class="mic-slash"
-x1="4" y1="4" x2="20" y2="20"/>
-
+<div class="mic-container" id="mic-slot-${i}" style="display:none">
+<svg class="mic-icon-svg" viewBox="0 0 24 24" fill="none" aria-label="Status mikrofon">
+<path class="mic-body" d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
+<path class="mic-body" d="M19 10v1a7 7 0 0 1-6 6.93V20h3v2H8v-2h3v-2.07A7 7 0 0 1 5 11v-1h2v1a5 5 0 0 0 10 0v-1h2z"/>
+<line class="mic-slash-bg" x1="4" y1="4" x2="20" y2="20"/>
+<line class="mic-slash" x1="4" y1="4" x2="20" y2="20"/>
 </svg>
 </div>
-
 </div>
-
 `);
-
 }
 
-/* ==================================
-   HOST TETAP MUTE
-================================== */
-
-function handleHostBoxClick(){
-
-const v1=$('hostVideo');
-const v2=$('hostVideo2');
-
-[v1,v2].forEach(video=>{
-if(video){
-video.muted=true;
-video.volume=0;
-}
-});
-
-}
+/* STATUS MIKROFON */
 
 function getMuteStatus(data){
-
-const keys=[
-'isMuted',
-'is_mute',
-'mute',
-'muted',
-'isMicMuted',
-'micMuted',
-'is_mic_muted'
-];
+const keys=['isMuted','is_mute','mute','muted','isMicMuted','micMuted','is_mic_muted'];
 
 for(const key of keys){
-
 if(Object.prototype.hasOwnProperty.call(data,key)){
-
 const value=data[key];
 
 if(typeof value==='boolean')return value;
-
-if(value===1||value==='1'||value==='true'||value==='muted'){
-return true;
+if(value===1||value==='1'||value==='true'||value==='muted')return true;
+if(value===0||value==='0'||value==='false'||value==='unmuted')return false;
 }
-
-if(value===0||value==='0'||value==='false'||value==='unmuted'){
-return false;
 }
-
-}
-
-}
-
 return null;
 }
 
 function updateMicStatus(slotNum,status){
-
 const mic=$(`mic-slot-${slotNum}`);
-
 if(!mic||status===null||status===undefined)return;
 
 slotMuteStates[slotNum]=Boolean(status);
-
 mic.classList.toggle('is-unmuted',!Boolean(status));
-
-mic.title=status
-?'Mikrofon dimatikan (Muted)'
-:'Mikrofon aktif';
-
+mic.title=status?'Mikrofon dimatikan (Muted)':'Mikrofon aktif';
 }
 
-/* ==================================
-   LOOP VIDEO HOST TANPA SUARA
-================================== */
+/* VIDEO HOST */
 
 function setupSeamlessHostVideo(url){
-
 stopHostSeamlessLoop();
 
 const v1=$('hostVideo');
@@ -747,42 +556,32 @@ const v2=$('hostVideo2');
 
 v1.srcObject=null;
 v2.srcObject=null;
-
 v1.src=url;
 v2.src=url;
 
 v1.loop=false;
 v2.loop=false;
-
 v1.muted=true;
 v1.volume=0;
-
 v2.muted=true;
 v2.volume=0;
 
 v1.style.display='block';
 v2.style.display='block';
-
 v1.style.opacity='1';
 v2.style.opacity='0';
-
 v1.style.zIndex='3';
 v2.style.zIndex='2';
 
 activeHostVid=1;
 hostLoopActive=true;
 
-v1.play().catch(()=>{
-v1.muted=true;
 v1.play().catch(()=>{});
-});
 
 let switching=false;
 
 const switchToNext=()=>{
-
 if(!hostLoopActive||switching)return;
-
 switching=true;
 
 const current=activeHostVid===1?v1:v2;
@@ -793,111 +592,73 @@ next.muted=true;
 next.volume=0;
 
 next.play().then(()=>{
-
 current.muted=true;
 current.volume=0;
 
 next.style.zIndex='3';
 current.style.zIndex='2';
-
 next.style.opacity='1';
 current.style.opacity='0';
 
 activeHostVid=activeHostVid===1?2:1;
 
 setTimeout(()=>{
-
 if(hostLoopActive){
 current.pause();
 current.currentTime=0;
 }
-
 switching=false;
-
 },240);
 
 }).catch(()=>{
-
 switching=false;
-
 });
-
 };
 
-const handleTimeUpdate=(ev)=>{
-
+const handleTimeUpdate=ev=>{
 if(!hostLoopActive)return;
-
 const current=activeHostVid===1?v1:v2;
-
 if(ev.target!==current)return;
 
 if(current.duration&&Number.isFinite(current.duration)){
-
-const timeLeft=current.duration-current.currentTime;
-
-if(timeLeft<=0.20&&!switching){
+if(current.duration-current.currentTime<=0.20&&!switching){
 switchToNext();
 }
-
 }
-
 };
 
-const handleEnded=(ev)=>{
-
+const handleEnded=ev=>{
 if(!hostLoopActive)return;
-
 const current=activeHostVid===1?v1:v2;
-
-if(ev.target===current){
-switchToNext();
-}
-
+if(ev.target===current)switchToNext();
 };
 
 v1.ontimeupdate=handleTimeUpdate;
 v2.ontimeupdate=handleTimeUpdate;
-
 v1.onended=handleEnded;
 v2.onended=handleEnded;
-
 }
 
 function stopHostSeamlessLoop(){
-
 hostLoopActive=false;
-
 $('unmuteHint').style.display='none';
 
-const v1=$('hostVideo');
-const v2=$('hostVideo2');
-
-[v1,v2].forEach((v,index)=>{
-
+[$('hostVideo'),$('hostVideo2')].forEach((v,index)=>{
 if(!v)return;
 
 v.ontimeupdate=null;
 v.onended=null;
-
 v.pause();
-
 v.muted=true;
 v.volume=0;
-
 v.removeAttribute('src');
 v.load();
-
 v.style.opacity=index===0?'1':'0';
 v.style.display='none';
-
 });
-
 }
 
-/* ==================================
-   WEBGL VIDEO GIFT
-================================== */
+/* WEBGL GIFT */
 
 let gl=null;
 let glProgram=null;
@@ -906,11 +667,9 @@ let glBuffers={};
 let isWebGLSupported=false;
 
 function initWebGL(canvas){
-
 if(gl&&glProgram&&glTexture)return true;
 
 try{
-
 gl=canvas.getContext('webgl',{
 alpha:true,
 premultipliedAlpha:false,
@@ -922,163 +681,122 @@ powerPreference:'high-performance'
 });
 
 if(!gl)return false;
-
 gl.disable(gl.BLEND);
 
 const vsSource=`
 attribute vec2 a_pos;
 attribute vec2 a_tex;
 varying vec2 v_tex;
-
 void main(){
 gl_Position=vec4(a_pos,0.0,1.0);
 v_tex=a_tex;
-}
-`;
+}`;
 
 const fsSource=`
 precision mediump float;
 uniform sampler2D u_tex;
 varying vec2 v_tex;
-
 void main(){
-
 vec4 c=texture2D(u_tex,v_tex);
-
 float maxRB=max(c.r,c.b);
 float gDiff=c.g-maxRB;
 float maxC=max(c.r,max(c.g,c.b));
-
 float greenAmount=smoothstep(0.08,0.28,gDiff);
 float blackAmount=1.0-smoothstep(0.025,0.085,maxC);
-
 float alpha=1.0-max(greenAmount,blackAmount);
 
 if(gDiff>0.0&&c.g>maxRB){
-
 float spill=clamp(gDiff*1.8,0.0,0.75);
-
 c.g=mix(c.g,maxRB,spill);
-
 }
 
 c.a=alpha;
-
 gl_FragColor=c;
-
-}
-`;
+}`;
 
 function createShader(type,src){
-
 const shader=gl.createShader(type);
-
 gl.shaderSource(shader,src);
 gl.compileShader(shader);
 
 if(!gl.getShaderParameter(shader,gl.COMPILE_STATUS)){
-
+console.error('Shader error:',gl.getShaderInfoLog(shader));
 gl.deleteShader(shader);
 return null;
-
 }
-
 return shader;
-
 }
 
 const vs=createShader(gl.VERTEX_SHADER,vsSource);
 const fs=createShader(gl.FRAGMENT_SHADER,fsSource);
-
 if(!vs||!fs)return false;
 
 glProgram=gl.createProgram();
-
 gl.attachShader(glProgram,vs);
 gl.attachShader(glProgram,fs);
-
 gl.linkProgram(glProgram);
-
 gl.deleteShader(vs);
 gl.deleteShader(fs);
 
 if(!gl.getProgramParameter(glProgram,gl.LINK_STATUS)){
+console.error('WebGL link error:',gl.getProgramInfoLog(glProgram));
 return false;
 }
 
 const posBuffer=gl.createBuffer();
-
 gl.bindBuffer(gl.ARRAY_BUFFER,posBuffer);
-
-gl.bufferData(
-gl.ARRAY_BUFFER,
-new Float32Array([
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([
 -1,-1,1,-1,-1,1,
 -1,1,1,-1,1,1
-]),
-gl.STATIC_DRAW
-);
+]),gl.STATIC_DRAW);
 
 const texBuffer=gl.createBuffer();
-
 gl.bindBuffer(gl.ARRAY_BUFFER,texBuffer);
-
-gl.bufferData(
-gl.ARRAY_BUFFER,
-new Float32Array([
+gl.bufferData(gl.ARRAY_BUFFER,new Float32Array([
 0,1,1,1,0,0,
 0,0,1,1,1,0
-]),
-gl.STATIC_DRAW
-);
+]),gl.STATIC_DRAW);
 
 glBuffers.pos=posBuffer;
 glBuffers.tex=texBuffer;
 
 glTexture=gl.createTexture();
-
 gl.bindTexture(gl.TEXTURE_2D,glTexture);
-
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
 gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
 
 gl.useProgram(glProgram);
-
-gl.uniform1i(
-gl.getUniformLocation(glProgram,'u_tex'),
-0
-);
+gl.uniform1i(gl.getUniformLocation(glProgram,'u_tex'),0);
 
 isWebGLSupported=true;
-
 return true;
 
 }catch(e){
-
+console.error('WebGL gagal:',e);
 return false;
-
+}
 }
 
-}
-
-/* ==================================
-   DATABASE ASSETS
-================================== */
+/* DATABASE VIDEO */
 
 const DB_NAME="TikTokStudioStorageDB";
 const STORE_NAME="permanent_assets";
-
 let dbPromise=null;
 
 function openDB(){
-
 if(dbPromise)return dbPromise;
 
 dbPromise=new Promise(resolve=>{
-
 const req=indexedDB.open(DB_NAME,1);
+
+req.onupgradeneeded=()=>{
+const db=req.result;
+if(!db.objectStoreNames.contains(STORE_NAME)){
+db.createObjectStore(STORE_NAME);
+}
+};
 
 req.onsuccess=()=>resolve(req.result);
 
@@ -1091,75 +809,47 @@ req.onblocked=()=>{
 dbPromise=null;
 resolve(null);
 };
-
 });
 
 return dbPromise;
-
 }
 
 async function getSavedVideo(id){
-
 try{
-
 const db=await openDB();
-
-if(!db)return null;
+if(!db||!db.objectStoreNames.contains(STORE_NAME))return null;
 
 return await new Promise(resolve=>{
+let tx;
 
-const tx=db.transaction(STORE_NAME,"readonly");
-
+try{
+tx=db.transaction(STORE_NAME,"readonly");
 const req=tx.objectStore(STORE_NAME).get(`video_${id}`);
-
-req.onsuccess=()=>resolve(req.result);
-
+req.onsuccess=()=>resolve(req.result||null);
 req.onerror=()=>resolve(null);
-
-});
-
 }catch(e){
-
-return null;
-
+resolve(null);
 }
-
+});
+}catch(e){
+console.error('Gagal membaca video:',e);
+return null;
+}
 }
 
 function formatPoin(val){
-
 const number=Number(val);
-
 if(!Number.isFinite(number)||number<=0)return '0';
-
-if(number>=1000000){
-return(number/1000000).toFixed(1)+'M';
-}
-
-if(number>=1000){
-return(number/1000).toFixed(1)+'K';
-}
-
+if(number>=1000000)return(number/1000000).toFixed(1)+'M';
+if(number>=1000)return(number/1000).toFixed(1)+'K';
 return Math.floor(number).toString();
-
 }
 
-/* ==================================
-   UPDATE SLOT
-================================== */
+/* UPDATE SLOT */
 
 function updateSlotDisplay(data){
-
-const{
-slotNum,
-nameInput,
-initialPoin,
-profileImg,
-action
-}=data;
-
+const{slotNum,nameInput,initialPoin,profileImg,action}=data;
 const slotBox=$(`slot-${slotNum}`);
-
 if(!slotBox)return;
 
 const coinBadge=$(`coin-badge-${slotNum}`);
@@ -1175,49 +865,34 @@ const req=$(`req-${slotNum}`);
 const topBadge=$(`topbadge-slot-${slotNum}`);
 
 if(action==='clear_slot'){
-
 slotBox.classList.remove('has-photo');
-
 img.style.display='none';
 img.removeAttribute('src');
-
 bg.style.display='none';
 bg.removeAttribute('src');
-
 bgOverlay.style.display='none';
-
 slotBox.style.background='';
-
 icon.style.display='block';
 req.style.display='inline-block';
-
 namePill.style.display='none';
-
 mic.style.display='none';
 mic.classList.remove('is-unmuted');
-
 delete slotMuteStates[slotNum];
-
 coinBadge.style.display='none';
 
 if(topBadge){
-
 topBadge.style.display='none';
 topBadge.removeAttribute('src');
-
 }
 
 if(badgeTimers[slotNum]){
-
 clearTimeout(badgeTimers[slotNum]);
 delete badgeTimers[slotNum];
-
 }
 
 slotPoints[slotNum]=0;
-
+countElem.innerText='0';
 return;
-
 }
 
 if(initialPoin!==undefined){
@@ -1225,11 +900,9 @@ slotPoints[slotNum]=initialPoin;
 }
 
 countElem.innerText=formatPoin(slotPoints[slotNum]);
-
 coinBadge.style.display='flex';
 
 if(nameInput){
-
 nameText.innerText=nameInput;
 namePill.style.display='flex';
 mic.style.display='flex';
@@ -1237,98 +910,63 @@ mic.style.display='flex';
 const muteStatus=getMuteStatus(data);
 
 if(muteStatus!==null){
-
 updateMicStatus(slotNum,muteStatus);
-
 }else if(slotMuteStates[slotNum]!==undefined){
-
 updateMicStatus(slotNum,slotMuteStates[slotNum]);
-
 }else{
-
 updateMicStatus(slotNum,true);
-
 }
-
 }
 
 if(profileImg){
-
 icon.style.display='none';
 req.style.display='none';
 
 img.onload=()=>{
-
 if(img.src===profileImg){
-
 slotBox.classList.add('has-photo');
 slotBox.style.background='#191b22';
-
 }
-
 };
 
 img.onerror=()=>{
-
 slotBox.classList.remove('has-photo');
 slotBox.style.background='';
-
 };
 
 img.src=profileImg;
 img.style.display='block';
-
 bg.src=profileImg;
 bg.style.display='block';
-
 bgOverlay.style.display='block';
-
+}
 }
 
-}
-
-/* ==================================
-   BADGE GIFT
-================================== */
+/* BADGE GIFT */
 
 function showGiftBadgeTemporarily(slotNum,badgeSrc){
-
 if(!badgeSrc||!slotNum)return;
-
 const topBadge=$(`topbadge-slot-${slotNum}`);
-
 if(!topBadge)return;
 
-if(badgeTimers[slotNum]){
-clearTimeout(badgeTimers[slotNum]);
-}
+if(badgeTimers[slotNum])clearTimeout(badgeTimers[slotNum]);
 
 topBadge.src=badgeSrc;
 topBadge.style.display='block';
 
 badgeTimers[slotNum]=setTimeout(()=>{
-
 topBadge.style.display='none';
 topBadge.removeAttribute('src');
-
 delete badgeTimers[slotNum];
-
 },5000);
-
 }
 
-/* ==================================
-   ANTRIAN VIDEO GIFT
-================================== */
+/* ANTREAN VIDEO GIFT */
 
 function queueGiftVideo(src,repeatCount=1){
-
 if(!src)return;
 
-const count=Math.max(
-1,
-Math.min(999,Number(repeatCount)||1)
-);
+const count=Math.max(1,Math.min(999,Number(repeatCount)||1));
 
 giftVideoQueue.push({
 src,
@@ -1337,95 +975,57 @@ isBlob:src.startsWith('blob:')
 });
 
 playNextGiftVideo();
-
 }
 
 function playNextGiftVideo(){
-
 if(giftVideoQueueBusy)return;
 
 if(giftVideoQueue.length===0){
-
 restoreHostVolumeAfterGift();
-
 return;
-
 }
 
 giftVideoQueueBusy=true;
-
 const item=giftVideoQueue[0];
 
 playGiftVideo(item.src,()=>{
-
 item.remaining--;
 
 if(item.remaining>0){
-
 giftVideoQueueBusy=false;
-
 setTimeout(playNextGiftVideo,50);
-
 }else{
-
 giftVideoQueue.shift();
 
 if(item.isBlob){
-
-try{
-URL.revokeObjectURL(item.src);
-}catch(e){}
-
+try{URL.revokeObjectURL(item.src)}catch(e){}
 }
 
 giftVideoQueueBusy=false;
-
 setTimeout(playNextGiftVideo,50);
-
 }
-
 });
-
 }
 
 function getGiftComboKey(data){
-
-const sender=String(
-data.senderName||data.username||'user'
-).toLowerCase();
-
-const gift=String(
-data.giftId||data.giftTitle||'gift'
-).toLowerCase();
-
+const sender=String(data.senderName||data.username||'user').toLowerCase();
+const gift=String(data.giftId||data.giftTitle||'gift').toLowerCase();
 return`${sender}::${gift}`;
-
 }
 
 async function resolveGiftVideo(data){
-
-if(data.videoBlob){
-return URL.createObjectURL(data.videoBlob);
-}
+if(data.videoBlob)return URL.createObjectURL(data.videoBlob);
 
 if(data.giftId){
-
 const blob=await getSavedVideo(data.giftId);
-
-if(blob){
-return URL.createObjectURL(blob);
-}
-
+if(blob)return URL.createObjectURL(blob);
 }
 
 if(data.src)return data.src;
-
 return null;
-
 }
 
 function receiveGiftForCombo(data){
-
 const key=getGiftComboKey(data);
 
 const rawCumulative=
@@ -1435,11 +1035,9 @@ data.repeat_count??
 data.combo_count;
 
 const cumulativeCount=Number(rawCumulative);
-
 let group=giftComboGroups.get(key);
 
 if(!group){
-
 group={
 data:{...data},
 count:0,
@@ -1448,82 +1046,42 @@ timer:null,
 revision:0,
 videoPromise:Promise.resolve()
 };
-
 giftComboGroups.set(key,group);
-
 }
 
 group.revision++;
-
 group.data={...group.data,...data};
 
 if(Number.isFinite(cumulativeCount)&&cumulativeCount>0){
-
-group.count=Math.max(
-group.count,
-Math.floor(cumulativeCount)
-);
-
+group.count=Math.max(group.count,Math.floor(cumulativeCount));
 }else{
-
-group.count+=Math.max(
-1,
-Math.floor(Number(data.giftCount)||1)
-);
-
+group.count+=Math.max(1,Math.floor(Number(data.giftCount)||1));
 }
 
 clearTimeout(group.timer);
 
 group.videoPromise=group.videoPromise.then(async()=>{
-
 const resolvedSrc=await resolveGiftVideo(data);
 
 if(resolvedSrc){
-
-if(
-group.src&&
-group.src.startsWith('blob:')&&
-group.src!==resolvedSrc
-){
-
-try{
-URL.revokeObjectURL(group.src);
-}catch(e){}
-
+if(group.src&&group.src.startsWith('blob:')&&group.src!==resolvedSrc){
+try{URL.revokeObjectURL(group.src)}catch(e){}
 }
-
 group.src=resolvedSrc;
-
 }
-
-}).catch(err=>console.error(
-'Gagal memuat video gift:',
-err
-));
+}).catch(err=>console.error('Gagal memuat video gift:',err));
 
 const finishCombo=async()=>{
-
 const finishingRevision=group.revision;
-
 await group.videoPromise;
 
-if(
-giftComboGroups.get(key)!==group||
-group.revision!==finishingRevision
-)return;
+if(giftComboGroups.get(key)!==group||group.revision!==finishingRevision)return;
 
 giftComboGroups.delete(key);
 
 if(group.src){
-
-queueGiftVideo(
-group.src,
-Math.max(1,group.count)
-);
-
+queueGiftVideo(group.src,Math.max(1,group.count));
 }
-
 };
 
 const comboEnded=
@@ -1532,140 +1090,79 @@ data.repeat_end===true||
 data.comboEnd===true||
 data.combo_end===true;
 
-group.timer=setTimeout(
-finishCombo,
-comboEnded?0:900
-);
-
+group.timer=setTimeout(finishCombo,comboEnded?0:900);
 }
 
-/* ==================================
-   BROADCAST CHANNEL
-================================== */
+/* BROADCAST CHANNEL */
 
 function handleIncomingMessage(data){
-
 if(!data)return;
 
 if(data.type==='SET_HOST_VIDEO'){
-
 releaseHostObjectURL();
 
 if(data.videoBlob){
-
 hostMediaObjectURL=URL.createObjectURL(data.videoBlob);
-
 setupSeamlessHostVideo(hostMediaObjectURL);
-
 $('hostPlaceholder').style.display='none';
-
 }else if(data.src||data.videoUrl){
-
-setupSeamlessHostVideo(
-data.src||data.videoUrl
-);
-
+setupSeamlessHostVideo(data.src||data.videoUrl);
 $('hostPlaceholder').style.display='none';
-
 }
-
 }
 
 else if(data.type==='RESET_HOST_MEDIA'){
-
 stopHostSeamlessLoop();
-
 releaseHostObjectURL();
-
 $('hostPlaceholder').style.display='none';
-
 }
 
 else if(data.type==='UPDATE_SLOT'){
-
 updateSlotDisplay(data);
-
 }
 
-else if(
-data.type==='UPDATE_SLOT_MUTE'||
-data.type==='SLOT_MUTE_UPDATE'
-){
-
+else if(data.type==='UPDATE_SLOT_MUTE'||data.type==='SLOT_MUTE_UPDATE'){
 const slotNum=Number(data.slotNum);
 
 if(slotNum>=1&&slotNum<=8){
-
 const status=getMuteStatus(data);
 
 if(status!==null){
-
 slotMuteStates[slotNum]=status;
-
 const mic=$(`mic-slot-${slotNum}`);
 
 if(mic){
-
 mic.style.display='flex';
-
 updateMicStatus(slotNum,status);
-
 }
-
 }
-
 }
-
 }
 
 else if(data.type==='PLAY_GIFT'){
-
 const targetSlot=Number(data.targetSlot);
 
 if(targetSlot&&slotPoints[targetSlot]!==undefined){
-
 slotPoints[targetSlot]+=Number(data.increment||0);
 
 const countElem=$(`coincount-slot-${targetSlot}`);
-
-if(countElem){
-
-countElem.innerText=formatPoin(
-slotPoints[targetSlot]
-);
-
-}
+if(countElem)countElem.innerText=formatPoin(slotPoints[targetSlot]);
 
 const badge=$(`coin-badge-${targetSlot}`);
-
-if(badge){
-badge.style.display='flex';
-}
-
+if(badge)badge.style.display='flex';
 }
 
 if(data.badgeImg){
-
-showGiftBadgeTemporarily(
-targetSlot,
-data.badgeImg
-);
-
+showGiftBadgeTemporarily(targetSlot,data.badgeImg);
 }
 
 receiveGiftForCombo(data);
-
+}
 }
 
-}
+channel.onmessage=event=>handleIncomingMessage(event.data);
 
-channel.onmessage=event=>{
-handleIncomingMessage(event.data);
-};
-
-/* ==================================
-   WEBSOCKET
-================================== */
+/* WEBSOCKET */
 
 let ws=null;
 let reconnectTimer=null;
@@ -1673,128 +1170,64 @@ let reconnectDelay=1000;
 let manuallyClosed=false;
 
 function connectWebSocket(){
-
 if(manuallyClosed)return;
 
-if(
-ws&&
-(
-ws.readyState===WebSocket.CONNECTING||
-ws.readyState===WebSocket.OPEN
-)
-)return;
+if(ws&&(ws.readyState===WebSocket.CONNECTING||ws.readyState===WebSocket.OPEN))return;
 
 try{
-
-const protocol=
-location.protocol==='https:'?'wss:':'ws:';
-
-ws=new WebSocket(
-`${protocol}//${location.host||'localhost:8081'}`
-);
+const protocol=location.protocol==='https:'?'wss:':'ws:';
+ws=new WebSocket(`${protocol}//${location.host||'localhost:8081'}`);
 
 ws.onopen=()=>{
 reconnectDelay=1000;
 };
 
 ws.onmessage=event=>{
-
 try{
-
 const d=JSON.parse(event.data);
 
 if(d.type==='gift'){
-
 handleIncomingMessage({
-
 type:'PLAY_GIFT',
-
 targetSlot:1,
-
 increment:Number(d.coins||1),
-
 badgeImg:d.giftImage||'',
-
 giftTitle:d.giftName||'Gift',
-
 senderName:d.nickname||d.username||'User',
-
 senderAvatar:d.avatar||'',
-
 giftId:d.giftId||d.gift_id||d.id||'',
-
-repeatCount:
-d.repeatCount??
-d.repeat_count??
-d.comboCount??
-d.combo_count,
-
-giftCount:
-d.giftCount??
-d.gift_count,
-
-repeatEnd:
-d.repeatEnd??
-d.repeat_end??
-d.comboEnd??
-d.combo_end,
-
+repeatCount:d.repeatCount??d.repeat_count??d.comboCount??d.combo_count,
+giftCount:d.giftCount??d.gift_count,
+repeatEnd:d.repeatEnd??d.repeat_end??d.comboEnd??d.combo_end,
 videoBlob:d.videoBlob,
-
-src:
-d.src||
-d.videoUrl||
-d.video_url||
-''
-
+src:d.src||d.videoUrl||d.video_url||''
 });
-
 }
-
-}catch(err){}
-
+}catch(err){
+console.error('Pesan WebSocket tidak valid:',err);
+}
 };
 
 ws.onerror=()=>{};
 
 ws.onclose=()=>{
-
 ws=null;
-
 if(manuallyClosed)return;
 
 clearTimeout(reconnectTimer);
-
-reconnectTimer=setTimeout(
-connectWebSocket,
-reconnectDelay
-);
-
-reconnectDelay=Math.min(
-reconnectDelay*1.5,
-10000
-);
-
+reconnectTimer=setTimeout(connectWebSocket,reconnectDelay);
+reconnectDelay=Math.min(reconnectDelay*1.5,10000);
 };
 
 }catch(err){
-
 clearTimeout(reconnectTimer);
-
-reconnectTimer=setTimeout(
-connectWebSocket,
-reconnectDelay
-);
-
+reconnectTimer=setTimeout(connectWebSocket,reconnectDelay);
 }
-
 }
 
 connectWebSocket();
 
-/* ==================================
-   RENDERER VIDEO GIFT
-================================== */
+/* RENDERER VIDEO GIFT */
 
 let glReady=false;
 let renderActive=false;
@@ -1811,170 +1244,103 @@ const giftOverlay=$('giftOverlayContainer');
 let canvas2D=null;
 
 function stopGiftRenderer(){
-
 renderActive=false;
 
 if(renderFrameId!==null){
-
 cancelAnimationFrame(renderFrameId);
 renderFrameId=null;
-
 }
 
-if(
-videoFrameCallbackId!==null&&
-giftVideo.cancelVideoFrameCallback
-){
-
-giftVideo.cancelVideoFrameCallback(
-videoFrameCallbackId
-);
-
+if(videoFrameCallbackId!==null&&giftVideo.cancelVideoFrameCallback){
+giftVideo.cancelVideoFrameCallback(videoFrameCallbackId);
 }
 
 videoFrameCallbackId=null;
-
 }
 
 function renderGiftFrame(){
-
 if(!renderActive)return;
 
 const video=giftVideo;
 
 if(video.ended){
-
-if(activeFinishHandler){
-activeFinishHandler();
-}
-
+if(activeFinishHandler)activeFinishHandler();
 return;
-
 }
 
 if(video.readyState<video.HAVE_CURRENT_DATA){
-
 scheduleGiftFrame();
-
 return;
-
 }
 
 if(video.currentTime!==lastVideoTime){
-
 lastVideoTime=video.currentTime;
 
 if(glReady&&gl){
-
 try{
-
-gl.bindTexture(
-gl.TEXTURE_2D,
-glTexture
-);
-
-gl.texImage2D(
-gl.TEXTURE_2D,
-0,
-gl.RGBA,
-gl.RGBA,
-gl.UNSIGNED_BYTE,
-video
-);
-
-gl.drawArrays(
-gl.TRIANGLES,
-0,
-6
-);
-
-}catch(e){}
-
+gl.bindTexture(gl.TEXTURE_2D,glTexture);
+gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL,true);
+gl.texImage2D(gl.TEXTURE_2D,0,gl.RGBA,gl.RGBA,gl.UNSIGNED_BYTE,video);
+gl.drawArrays(gl.TRIANGLES,0,6);
+}catch(e){
+console.error('Render WebGL gagal:',e);
+}
 }else if(canvas2D){
-
 try{
-
-canvas2D.drawImage(
-video,
-0,
-0,
-giftCanvas.width,
-giftCanvas.height
-);
-
-}catch(e){}
-
+canvas2D.drawImage(video,0,0,giftCanvas.width,giftCanvas.height);
+}catch(e){
+console.error('Render Canvas gagal:',e);
+}
 }
 
 if(!giftOverlay.classList.contains('visible')){
-
 giftOverlay.classList.add('visible');
-
 }
-
 }
 
 scheduleGiftFrame();
-
 }
 
 function scheduleGiftFrame(){
-
 if(!renderActive)return;
 
 if(giftVideo.requestVideoFrameCallback){
-
-videoFrameCallbackId=
-giftVideo.requestVideoFrameCallback(()=>{
-
+videoFrameCallbackId=giftVideo.requestVideoFrameCallback(()=>{
 videoFrameCallbackId=null;
-
 renderGiftFrame();
-
 });
-
 }else{
-
 renderFrameId=requestAnimationFrame(()=>{
-
 renderFrameId=null;
-
 renderGiftFrame();
-
 });
-
+}
 }
 
-}
-
-/* ==================================
-   PUTAR VIDEO GIFT DENGAN SUARA
-================================== */
+/* PUTAR VIDEO GIFT */
 
 function playGiftVideo(src,onFinished){
-
 const video=giftVideo;
 const canvas=giftCanvas;
 const overlay=giftOverlay;
-
 const generation=++giftVideoGeneration;
 
 let finished=false;
 let safetyTimer=null;
+let playbackStarted=false;
 
 stopGiftRenderer();
-
-/* HOST TETAP MUTE */
 setHostVolume();
 
 function finish(){
-
 if(finished)return;
-
 finished=true;
 
-activeFinishHandler=null;
+if(pendingGiftStart===startPlayback){
+pendingGiftStart=null;
+}
 
+activeFinishHandler=null;
 clearTimeout(safetyTimer);
 
 if(generation!==giftVideoGeneration)return;
@@ -1982,355 +1348,224 @@ if(generation!==giftVideoGeneration)return;
 overlay.classList.remove('visible');
 
 setTimeout(()=>{
-
 if(generation!==giftVideoGeneration)return;
 
 stopGiftRenderer();
-
 overlay.style.display='none';
 
 video.onended=null;
 video.onerror=null;
 video.onloadedmetadata=null;
 
-/* HENTIKAN SUARA GIFT */
 try{
-
 video.pause();
-
 video.muted=true;
 video.volume=0;
-
 video.removeAttribute('src');
-
 video.load();
-
 }catch(e){}
 
-/* BERSIHKAN CANVAS */
 if(gl){
-
 try{
-
 gl.clearColor(0,0,0,0);
 gl.clear(gl.COLOR_BUFFER_BIT);
-
 }catch(e){}
-
 }
 
 if(canvas2D){
-
 try{
-
-canvas2D.clearRect(
-0,
-0,
-canvas.width,
-canvas.height
-);
-
+canvas2D.clearRect(0,0,canvas.width,canvas.height);
 }catch(e){}
-
 }
 
-/* HOST TETAP SENYAP */
 setHostVolume();
 
-if(typeof onFinished==='function'){
-onFinished();
-}
+if(typeof onFinished==='function')onFinished();
 
 },200);
-
 }
 
 activeFinishHandler=finish;
-
 overlay.style.display='block';
-
 overlay.classList.remove('visible');
 
 try{
-
 video.pause();
-
 video.removeAttribute('src');
-
 video.load();
-
 }catch(e){}
 
-/* AUDIO ANIMASI AKTIF */
-video.src=src;
 video.muted=false;
 video.volume=1;
+video.src=src;
 
-/* HOST TETAP MUTE */
 setHostVolume();
 
 video.onended=finish;
-video.onerror=finish;
+video.onerror=()=>{
+console.error('Video gift gagal dimuat:',src);
+finish();
+};
 
 glReady=initWebGL(canvas);
-
 canvas2D=null;
 
 if(!glReady){
-
 try{
 canvas2D=canvas.getContext('2d');
 }catch(e){}
-
 }
 
+/* MULAI PEMUTARAN SETELAH AKTIVASI SUARA */
+
+async function startPlayback(){
+if(finished||generation!==giftVideoGeneration||playbackStarted)return;
+
+try{
+video.muted=false;
+video.volume=1;
+
+const playPromise=video.play();
+if(playPromise)await playPromise;
+
+if(finished||generation!==giftVideoGeneration)return;
+
+playbackStarted=true;
+pendingGiftStart=null;
+$('unmuteHint').style.display='none';
+
+clearTimeout(safetyTimer);
+
+if(video.duration&&Number.isFinite(video.duration)){
 safetyTimer=setTimeout(()=>{
-
 if(!finished)finish();
+},video.duration*1000+2500);
+}else{
+safetyTimer=setTimeout(()=>{
+if(!finished)finish();
+},120000);
+}
 
-},12000);
+renderActive=true;
+renderGiftFrame();
 
-video.onloadedmetadata=async()=>{
+}catch(err){
+console.warn('Pemutaran gift belum diizinkan:',err);
 
-if(
-finished||
-generation!==giftVideoGeneration
-)return;
+if(err&&err.name==='NotAllowedError'){
+pendingGiftStart=startPlayback;
+$('unmuteHint').innerText='Klik layar untuk aktifkan suara gift';
+$('unmuteHint').style.display='block';
+return;
+}
+
+finish();
+}
+}
+
+video.onloadedmetadata=()=>{
+if(finished||generation!==giftVideoGeneration)return;
 
 const originalWidth=video.videoWidth||1080;
 const originalHeight=video.videoHeight||1920;
 
-const scale=Math.min(
-1,
-1080/originalWidth,
-1920/originalHeight
-);
-
-const renderWidth=Math.max(
-1,
-Math.round(originalWidth*scale)
-);
-
-const renderHeight=Math.max(
-1,
-Math.round(originalHeight*scale)
-);
+const scale=Math.min(1,1080/originalWidth,1920/originalHeight);
+const renderWidth=Math.max(1,Math.round(originalWidth*scale));
+const renderHeight=Math.max(1,Math.round(originalHeight*scale));
 
 canvas.width=renderWidth;
 canvas.height=renderHeight;
 
-if(video.duration&&Number.isFinite(video.duration)){
-
-clearTimeout(safetyTimer);
-
-safetyTimer=setTimeout(()=>{
-
-if(!finished)finish();
-
-},(video.duration*1000)+1500);
-
-}
-
 if(glReady&&gl){
-
-gl.viewport(
-0,
-0,
-renderWidth,
-renderHeight
-);
-
+gl.viewport(0,0,renderWidth,renderHeight);
 gl.useProgram(glProgram);
 
-const posLoc=gl.getAttribLocation(
-glProgram,
-'a_pos'
-);
-
-gl.bindBuffer(
-gl.ARRAY_BUFFER,
-glBuffers.pos
-);
-
+const posLoc=gl.getAttribLocation(glProgram,'a_pos');
+gl.bindBuffer(gl.ARRAY_BUFFER,glBuffers.pos);
 gl.enableVertexAttribArray(posLoc);
+gl.vertexAttribPointer(posLoc,2,gl.FLOAT,false,0,0);
 
-gl.vertexAttribPointer(
-posLoc,
-2,
-gl.FLOAT,
-false,
-0,
-0
-);
-
-const texLoc=gl.getAttribLocation(
-glProgram,
-'a_tex'
-);
-
-gl.bindBuffer(
-gl.ARRAY_BUFFER,
-glBuffers.tex
-);
-
+const texLoc=gl.getAttribLocation(glProgram,'a_tex');
+gl.bindBuffer(gl.ARRAY_BUFFER,glBuffers.tex);
 gl.enableVertexAttribArray(texLoc);
-
-gl.vertexAttribPointer(
-texLoc,
-2,
-gl.FLOAT,
-false,
-0,
-0
-);
+gl.vertexAttribPointer(texLoc,2,gl.FLOAT,false,0,0);
 
 gl.activeTexture(gl.TEXTURE0);
-
-gl.bindTexture(
-gl.TEXTURE_2D,
-glTexture
-);
-
+gl.bindTexture(gl.TEXTURE_2D,glTexture);
 gl.clearColor(0,0,0,0);
-
 gl.clear(gl.COLOR_BUFFER_BIT);
 
 }else if(canvas2D){
-
-canvas2D.clearRect(
-0,
-0,
-renderWidth,
-renderHeight
-);
-
+canvas2D.clearRect(0,0,renderWidth,renderHeight);
 }
 
 lastVideoTime=-1;
 
-/* PUTAR GIFT DENGAN AUDIO */
-try{
-
-video.muted=false;
-video.volume=1;
-
-await video.play();
-
-if(
-finished||
-generation!==giftVideoGeneration
-)return;
-
-renderActive=true;
-
-renderGiftFrame();
-
-}catch(err){
-
-/* COBA ULANG TANPA MUTE */
-video.muted=false;
-video.volume=1;
-
-try{
-
-await video.play();
-
-if(
-finished||
-generation!==giftVideoGeneration
-)return;
-
-renderActive=true;
-
-renderGiftFrame();
-
-}catch(error){
-
-finish();
-
+if(giftAudioUnlocked){
+startPlayback();
+}else{
+pendingGiftStart=startPlayback;
+$('unmuteHint').innerText='Klik layar untuk aktifkan suara gift';
+$('unmuteHint').style.display='block';
 }
-
-}
-
 };
 
 video.load();
 
+/* BATAS WAKTU JIKA METADATA TIDAK PERNAH MASUK */
+safetyTimer=setTimeout(()=>{
+if(!finished&&!video.videoWidth){
+console.error('Metadata video gift tidak berhasil dimuat.');
+finish();
+}
+},30000);
 }
 
-/* ==================================
-   CLEANUP
-================================== */
+/* CLEANUP */
 
 function releaseHostObjectURL(){
-
 if(hostMediaObjectURL){
-
 URL.revokeObjectURL(hostMediaObjectURL);
-
 hostMediaObjectURL=null;
-
 }
-
 }
 
 window.addEventListener('pagehide',()=>{
-
 manuallyClosed=true;
 
 stopGiftRenderer();
-
 stopHostSeamlessLoop();
 
 if(ws){
-
 ws.close();
-
 ws=null;
-
 }
 
 clearTimeout(reconnectTimer);
 
 for(const timer of Object.values(badgeTimers)){
-
 clearTimeout(timer);
-
 }
 
 for(const group of giftComboGroups.values()){
-
 clearTimeout(group.timer);
-
 if(group.src?.startsWith('blob:')){
-
 URL.revokeObjectURL(group.src);
-
 }
-
 }
 
 giftComboGroups.clear();
 
 giftVideoQueue.forEach(item=>{
-
 if(item.isBlob){
-
 URL.revokeObjectURL(item.src);
-
 }
-
 });
 
 giftVideoQueue.length=0;
-
 releaseHostObjectURL();
-
 channel.close();
-
 });
-
 </script>
-
 </body>
 </html>
