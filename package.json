@@ -1,0 +1,13 @@
+{
+  "name": "nusantara-live",
+  "version": "1.0.0",
+  "description": "TikTok Live Control and Display",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^5.1.0",
+    "ws": "^8.18.3"
+  }
+}
