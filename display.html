@@ -110,7 +110,7 @@ pointer-events:none;
 display:none;
 opacity:0;
 background:transparent;
-transition:opacity .22s ease;
+transition:opacity .15s ease;
 will-change:opacity;
 }
 
@@ -138,6 +138,23 @@ pointer-events:none;
 transform:translateZ(0);
 backface-visibility:hidden;
 z-index:2;
+}
+
+/* FALLBACK VIDEO JIKA WEBGL TIDAK TERSEDIA */
+
+.gift-overlay.video-fallback #giftVideo{
+display:block;
+position:absolute;
+inset:0;
+width:100%;
+height:100%;
+object-fit:cover;
+object-position:center;
+z-index:3;
+}
+
+.gift-overlay.video-fallback #giftCanvas{
+display:none;
 }
 
 .live-layout{
@@ -461,11 +478,18 @@ font-size:9px;
 
 <div id="hostPlaceholder" class="host-placeholder"></div>
 
-<video id="hostVideo" class="host-video"
-autoplay playsinline muted preload="auto"></video>
+<video id="hostVideo"
+class="host-video"
+autoplay
+playsinline
+muted
+preload="auto"></video>
 
-<video id="hostVideo2" class="host-video"
-playsinline muted preload="auto"></video>
+<video id="hostVideo2"
+class="host-video"
+playsinline
+muted
+preload="auto"></video>
 
 </div>
 
@@ -493,7 +517,19 @@ preload="auto"></video>
 <script>
 'use strict';
 
+/* =========================================
+   KONFIGURASI
+========================================= */
+
 const channel = new BroadcastChannel('tiktok_live_channel');
+
+const GIFT_DELAY = 3000;
+const COMBO_DELAY = 900;
+const GIFT_LOAD_TIMEOUT = 20000;
+
+const $ = id => document.getElementById(id);
+
+const komalGrid = $('komalGrid');
 
 const slotPoints = {};
 const badgeTimers = {};
@@ -505,41 +541,15 @@ let hostLoopActive = false;
 
 const giftComboGroups = new Map();
 const giftVideoQueue = [];
+
 let giftVideoQueueBusy = false;
+let giftQueueTimer = null;
+let giftVideoGeneration = 0;
+let activeFinishHandler = null;
 
-/* JEDA VIDEO GIFT */
-const GIFT_DELAY = 3000;
-
-const $ = id => document.getElementById(id);
-const komalGrid = $('komalGrid');
-
-/* AUDIO HOST SELALU MATI */
-
-function setHostVolume(){
-const v1=$('hostVideo');
-const v2=$('hostVideo2');
-
-[v1,v2].forEach(video=>{
-if(video){
-video.muted=true;
-video.volume=0;
-}
-});
-}
-
-function lowerHostVolumeForGift(){
-setHostVolume();
-}
-
-function restoreHostVolumeAfterGift(){
-setHostVolume();
-}
-
-function getCurrentHostVolume(){
-return 0;
-}
-
-/* BUAT 8 SLOT PERMINTAAN */
+/* =========================================
+   BUAT 8 SLOT
+========================================= */
 
 for(let i=1;i<=8;i++){
 
@@ -571,9 +581,8 @@ id="coincount-slot-${i}">0</span>
 
 <img class="slot-top-badge"
 id="topbadge-slot-${i}"
-referrerpolicy="no-referrer"
-crossorigin="anonymous"
-alt="Gift">
+alt="Gift"
+referrerpolicy="no-referrer">
 
 <svg class="slot-plus-svg"
 id="icon-${i}"
@@ -607,17 +616,18 @@ fill="none">
 
 <line x1="8" y1="2.5"
 x2="8" y2="13.5"
-stroke="#ffffff"
+stroke="#fff"
 stroke-width="2.2"
-stroke-linecap="round"></line>
+stroke-linecap="round"/>
 
 <line x1="2.5" y1="8"
 x2="13.5" y2="8"
-stroke="#ffffff"
+stroke="#fff"
 stroke-width="2.2"
-stroke-linecap="round"></line>
+stroke-linecap="round"/>
 
 </svg>
+
 </div>
 </div>
 
@@ -627,8 +637,7 @@ style="display:none">
 
 <svg class="mic-icon-svg"
 viewBox="0 0 24 24"
-fill="none"
-aria-label="Status mikrofon">
+fill="none">
 
 <path class="mic-body"
 d="M12 2a3 3 0 0 0-3 3v6a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/>
@@ -643,6 +652,7 @@ x1="4" y1="4" x2="20" y2="20"/>
 x1="4" y1="4" x2="20" y2="20"/>
 
 </svg>
+
 </div>
 
 </div>
@@ -651,21 +661,46 @@ x1="4" y1="4" x2="20" y2="20"/>
 
 }
 
-/* HOST TETAP MUTE */
+/* =========================================
+   HOST SELALU TANPA SUARA
+========================================= */
 
-function handleHostBoxClick(){
+function setHostVolume(){
 
-const v1=$('hostVideo');
-const v2=$('hostVideo2');
+['hostVideo','hostVideo2'].forEach(id=>{
 
-[v1,v2].forEach(video=>{
+const video=$(id);
+
 if(video){
+
 video.muted=true;
 video.volume=0;
+
 }
+
 });
 
 }
+
+function lowerHostVolumeForGift(){
+setHostVolume();
+}
+
+function restoreHostVolumeAfterGift(){
+setHostVolume();
+}
+
+function getCurrentHostVolume(){
+return 0;
+}
+
+function handleHostBoxClick(){
+setHostVolume();
+}
+
+/* =========================================
+   STATUS MICROPHONE
+========================================= */
 
 function getMuteStatus(data){
 
@@ -681,7 +716,7 @@ const keys=[
 
 for(const key of keys){
 
-if(Object.prototype.hasOwnProperty.call(data,key)){
+if(!Object.prototype.hasOwnProperty.call(data,key))continue;
 
 const value=data[key];
 
@@ -693,8 +728,6 @@ return true;
 
 if(value===0||value==='0'||value==='false'||value==='unmuted'){
 return false;
-}
-
 }
 
 }
@@ -718,7 +751,9 @@ mic.title=status
 
 }
 
-/* LOOP VIDEO HOST TANPA SUARA */
+/* =========================================
+   VIDEO HOST
+========================================= */
 
 function setupSeamlessHostVideo(url){
 
@@ -736,11 +771,7 @@ v2.src=url;
 v1.loop=false;
 v2.loop=false;
 
-v1.muted=true;
-v1.volume=0;
-
-v2.muted=true;
-v2.volume=0;
+setHostVolume();
 
 v1.style.display='block';
 v2.style.display='block';
@@ -754,14 +785,11 @@ v2.style.zIndex='2';
 activeHostVid=1;
 hostLoopActive=true;
 
-v1.play().catch(()=>{
-v1.muted=true;
 v1.play().catch(()=>{});
-});
 
 let switching=false;
 
-const switchToNext=()=>{
+function switchToNext(){
 
 if(!hostLoopActive||switching)return;
 
@@ -799,14 +827,12 @@ switching=false;
 },240);
 
 }).catch(()=>{
-
 switching=false;
-
 });
 
-};
+}
 
-const handleTimeUpdate=(ev)=>{
+function handleTimeUpdate(ev){
 
 if(!hostLoopActive)return;
 
@@ -816,17 +842,15 @@ if(ev.target!==current)return;
 
 if(current.duration&&Number.isFinite(current.duration)){
 
-const timeLeft=current.duration-current.currentTime;
-
-if(timeLeft<=0.20&&!switching){
+if(current.duration-current.currentTime<=0.2&&!switching){
 switchToNext();
 }
 
 }
 
-};
+}
 
-const handleEnded=(ev)=>{
+function handleEnded(ev){
 
 if(!hostLoopActive)return;
 
@@ -836,7 +860,7 @@ if(ev.target===current){
 switchToNext();
 }
 
-};
+}
 
 v1.ontimeupdate=handleTimeUpdate;
 v2.ontimeupdate=handleTimeUpdate;
@@ -852,201 +876,47 @@ hostLoopActive=false;
 
 $('unmuteHint').style.display='none';
 
-const v1=$('hostVideo');
-const v2=$('hostVideo2');
+['hostVideo','hostVideo2'].forEach((id,index)=>{
 
-[v1,v2].forEach((v,index)=>{
+const video=$(id);
 
-if(!v)return;
+if(!video)return;
 
-v.ontimeupdate=null;
-v.onended=null;
+video.ontimeupdate=null;
+video.onended=null;
 
-v.pause();
+video.pause();
 
-v.muted=true;
-v.volume=0;
+video.muted=true;
+video.volume=0;
 
-v.removeAttribute('src');
-v.load();
+video.removeAttribute('src');
+video.load();
 
-v.style.opacity=index===0?'1':'0';
-v.style.display='none';
+video.style.opacity=index===0?'1':'0';
+video.style.display='none';
 
 });
 
 }
 
-/* WEBGL VIDEO GIFT */
+function releaseHostObjectURL(){
 
-let gl=null;
-let glProgram=null;
-let glTexture=null;
-let glBuffers={};
-let isWebGLSupported=false;
+if(hostMediaObjectURL){
 
-function initWebGL(canvas){
-
-if(gl&&glProgram&&glTexture)return true;
-
-try{
-
-gl=canvas.getContext('webgl',{
-alpha:true,
-premultipliedAlpha:false,
-antialias:true,
-depth:false,
-stencil:false,
-preserveDrawingBuffer:false,
-powerPreference:'high-performance'
-});
-
-if(!gl)return false;
-
-gl.disable(gl.BLEND);
-
-const vsSource=`
-attribute vec2 a_pos;
-attribute vec2 a_tex;
-varying vec2 v_tex;
-
-void main(){
-gl_Position=vec4(a_pos,0.0,1.0);
-v_tex=a_tex;
-}
-`;
-
-const fsSource=`
-precision mediump float;
-uniform sampler2D u_tex;
-varying vec2 v_tex;
-
-void main(){
-
-vec4 c=texture2D(u_tex,v_tex);
-
-float maxRB=max(c.r,c.b);
-float gDiff=c.g-maxRB;
-float maxC=max(c.r,max(c.g,c.b));
-
-float greenAmount=smoothstep(0.08,0.28,gDiff);
-float blackAmount=1.0-smoothstep(0.025,0.085,maxC);
-
-float alpha=1.0-max(greenAmount,blackAmount);
-
-if(gDiff>0.0&&c.g>maxRB){
-
-float spill=clamp(gDiff*1.8,0.0,0.75);
-
-c.g=mix(c.g,maxRB,spill);
-
-}
-
-c.a=alpha;
-
-gl_FragColor=c;
-
-}
-`;
-
-function createShader(type,src){
-
-const shader=gl.createShader(type);
-
-gl.shaderSource(shader,src);
-gl.compileShader(shader);
-
-if(!gl.getShaderParameter(shader,gl.COMPILE_STATUS)){
-
-gl.deleteShader(shader);
-return null;
-
-}
-
-return shader;
-
-}
-
-const vs=createShader(gl.VERTEX_SHADER,vsSource);
-const fs=createShader(gl.FRAGMENT_SHADER,fsSource);
-
-if(!vs||!fs)return false;
-
-glProgram=gl.createProgram();
-
-gl.attachShader(glProgram,vs);
-gl.attachShader(glProgram,fs);
-
-gl.linkProgram(glProgram);
-
-gl.deleteShader(vs);
-gl.deleteShader(fs);
-
-if(!gl.getProgramParameter(glProgram,gl.LINK_STATUS)){
-return false;
-}
-
-const posBuffer=gl.createBuffer();
-
-gl.bindBuffer(gl.ARRAY_BUFFER,posBuffer);
-
-gl.bufferData(
-gl.ARRAY_BUFFER,
-new Float32Array([
--1,-1,1,-1,-1,1,
--1,1,1,-1,1,1
-]),
-gl.STATIC_DRAW
-);
-
-const texBuffer=gl.createBuffer();
-
-gl.bindBuffer(gl.ARRAY_BUFFER,texBuffer);
-
-gl.bufferData(
-gl.ARRAY_BUFFER,
-new Float32Array([
-0,1,1,1,0,0,
-0,0,1,1,1,0
-]),
-gl.STATIC_DRAW
-);
-
-glBuffers.pos=posBuffer;
-glBuffers.tex=texBuffer;
-
-glTexture=gl.createTexture();
-
-gl.bindTexture(gl.TEXTURE_2D,glTexture);
-
-gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_S,gl.CLAMP_TO_EDGE);
-gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_WRAP_T,gl.CLAMP_TO_EDGE);
-gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MIN_FILTER,gl.LINEAR);
-gl.texParameteri(gl.TEXTURE_2D,gl.TEXTURE_MAG_FILTER,gl.LINEAR);
-
-gl.useProgram(glProgram);
-
-gl.uniform1i(
-gl.getUniformLocation(glProgram,'u_tex'),
-0
-);
-
-isWebGLSupported=true;
-
-return true;
-
-}catch(e){
-
-return false;
+URL.revokeObjectURL(hostMediaObjectURL);
+hostMediaObjectURL=null;
 
 }
 
 }
 
-/* DATABASE ASSETS */
+/* =========================================
+   DATABASE VIDEO
+========================================= */
 
-const DB_NAME="TikTokStudioStorageDB";
-const STORE_NAME="permanent_assets";
+const DB_NAME='TikTokStudioStorageDB';
+const STORE_NAME='permanent_assets';
 
 let dbPromise=null;
 
@@ -1082,15 +952,17 @@ try{
 
 const db=await openDB();
 
-if(!db||!db.objectStoreNames.contains(STORE_NAME))return null;
+if(!db||!db.objectStoreNames.contains(STORE_NAME)){
+return null;
+}
 
 return await new Promise(resolve=>{
 
-const tx=db.transaction(STORE_NAME,"readonly");
+const tx=db.transaction(STORE_NAME,'readonly');
 
 const req=tx.objectStore(STORE_NAME).get(`video_${id}`);
 
-req.onsuccess=()=>resolve(req.result);
+req.onsuccess=()=>resolve(req.result||null);
 
 req.onerror=()=>resolve(null);
 
@@ -1098,11 +970,17 @@ req.onerror=()=>resolve(null);
 
 }catch(e){
 
+console.error('Database video error:',e);
+
 return null;
 
 }
 
 }
+
+/* =========================================
+   FORMAT POIN
+========================================= */
 
 function formatPoin(val){
 
@@ -1122,7 +1000,9 @@ return Math.floor(number).toString();
 
 }
 
-/* UPDATE SLOT */
+/* =========================================
+   UPDATE SLOT
+========================================= */
 
 function updateSlotDisplay(data){
 
@@ -1176,18 +1056,12 @@ delete slotMuteStates[slotNum];
 
 coinBadge.style.display='none';
 
-if(topBadge){
-
 topBadge.style.display='none';
 topBadge.removeAttribute('src');
 
-}
-
 if(badgeTimers[slotNum]){
-
 clearTimeout(badgeTimers[slotNum]);
 delete badgeTimers[slotNum];
-
 }
 
 slotPoints[slotNum]=0;
@@ -1210,20 +1084,14 @@ nameText.innerText=nameInput;
 namePill.style.display='flex';
 mic.style.display='flex';
 
-const muteStatus=getMuteStatus(data);
+const status=getMuteStatus(data);
 
-if(muteStatus!==null){
-
-updateMicStatus(slotNum,muteStatus);
-
+if(status!==null){
+updateMicStatus(slotNum,status);
 }else if(slotMuteStates[slotNum]!==undefined){
-
 updateMicStatus(slotNum,slotMuteStates[slotNum]);
-
 }else{
-
 updateMicStatus(slotNum,true);
-
 }
 
 }
@@ -1234,21 +1102,12 @@ icon.style.display='none';
 req.style.display='none';
 
 img.onload=()=>{
-
-if(img.src===profileImg){
-
 slotBox.classList.add('has-photo');
 slotBox.style.background='#191b22';
-
-}
-
 };
 
 img.onerror=()=>{
-
 slotBox.classList.remove('has-photo');
-slotBox.style.background='';
-
 };
 
 img.src=profileImg;
@@ -1263,7 +1122,9 @@ bgOverlay.style.display='block';
 
 }
 
-/* BADGE GIFT */
+/* =========================================
+   BADGE GIFT
+========================================= */
 
 function showGiftBadgeTemporarily(slotNum,badgeSrc){
 
@@ -1291,15 +1152,9 @@ delete badgeTimers[slotNum];
 
 }
 
-/* ANTRIAN VIDEO GIFT */
-
-/*
-Setiap pesan gift dari Control:
-- Masuk antrean.
-- Tunggu tepat 3 detik.
-- Setelah 3 detik video langsung dimainkan.
-- Tidak ada jeda tambahan 900ms.
-*/
+/* =========================================
+   VIDEO GIFT - ANTRIAN AMAN
+========================================= */
 
 function queueGiftVideo(src,repeatCount=1){
 
@@ -1311,10 +1166,15 @@ Math.min(999,Number(repeatCount)||1)
 );
 
 giftVideoQueue.push({
-src,
+
+src:src,
+
 remaining:count,
+
 isBlob:src.startsWith('blob:'),
+
 delay:GIFT_DELAY
+
 });
 
 playNextGiftVideo();
@@ -1327,6 +1187,7 @@ if(giftVideoQueueBusy)return;
 
 if(giftVideoQueue.length===0){
 
+giftVideoQueueBusy=false;
 restoreHostVolumeAfterGift();
 
 return;
@@ -1337,12 +1198,21 @@ giftVideoQueueBusy=true;
 
 const item=giftVideoQueue[0];
 
-/* JEDA 3 DETIK SEBELUM VIDEO MUNCUL */
-setTimeout(()=>{
+clearTimeout(giftQueueTimer);
 
-if(giftVideoQueue[0]!==item)return;
+/* TUNGGU 3 DETIK */
+
+giftQueueTimer=setTimeout(()=>{
+
+if(giftVideoQueue[0]!==item){
+giftVideoQueueBusy=false;
+playNextGiftVideo();
+return;
+}
 
 playGiftVideo(item.src,()=>{
+
+if(giftVideoQueue[0]!==item)return;
 
 item.remaining--;
 
@@ -1374,6 +1244,56 @@ playNextGiftVideo();
 
 }
 
+/* =========================================
+   RESOLVE FILE VIDEO
+========================================= */
+
+async function resolveGiftVideo(data){
+
+if(data.videoBlob instanceof Blob){
+
+return URL.createObjectURL(data.videoBlob);
+
+}
+
+if(data.giftId){
+
+const saved=await getSavedVideo(data.giftId);
+
+if(saved){
+
+const blob=saved instanceof Blob
+?saved
+:(saved.blob instanceof Blob?saved.blob:null);
+
+if(blob){
+return URL.createObjectURL(blob);
+}
+
+if(typeof saved==='string'){
+return saved;
+}
+
+if(saved.src){
+return saved.src;
+}
+
+}
+
+}
+
+if(data.src){
+return data.src;
+}
+
+return null;
+
+}
+
+/* =========================================
+   COMBO GIFT
+========================================= */
+
 function getGiftComboKey(data){
 
 const sender=String(
@@ -1388,51 +1308,36 @@ return`${sender}::${gift}`;
 
 }
 
-async function resolveGiftVideo(data){
-
-if(data.videoBlob){
-return URL.createObjectURL(data.videoBlob);
-}
-
-if(data.giftId){
-
-const blob=await getSavedVideo(data.giftId);
-
-if(blob){
-return URL.createObjectURL(blob);
-}
-
-}
-
-if(data.src)return data.src;
-
-return null;
-
-}
-
 function receiveGiftForCombo(data){
 
 const key=getGiftComboKey(data);
 
-const rawCumulative=
+const raw=
 data.repeatCount??
 data.comboCount??
 data.repeat_count??
 data.combo_count;
 
-const cumulativeCount=Number(rawCumulative);
+const cumulative=Number(raw);
 
 let group=giftComboGroups.get(key);
 
 if(!group){
 
 group={
+
 data:{...data},
+
 count:0,
+
 src:null,
+
 timer:null,
+
 revision:0,
+
 videoPromise:Promise.resolve()
+
 };
 
 giftComboGroups.set(key,group);
@@ -1443,11 +1348,11 @@ group.revision++;
 
 group.data={...group.data,...data};
 
-if(Number.isFinite(cumulativeCount)&&cumulativeCount>0){
+if(Number.isFinite(cumulative)&&cumulative>0){
 
 group.count=Math.max(
 group.count,
-Math.floor(cumulativeCount)
+Math.floor(cumulative)
 );
 
 }else{
@@ -1461,16 +1366,18 @@ Math.floor(Number(data.giftCount)||1)
 
 clearTimeout(group.timer);
 
+/* CARI VIDEO TANPA MEMBLOKIR ANTREAN */
+
 group.videoPromise=group.videoPromise.then(async()=>{
 
-const resolvedSrc=await resolveGiftVideo(data);
+const resolved=await resolveGiftVideo(data);
 
-if(resolvedSrc){
+if(!resolved)return;
 
 if(
 group.src&&
 group.src.startsWith('blob:')&&
-group.src!==resolvedSrc
+group.src!==resolved
 ){
 
 try{
@@ -1479,25 +1386,28 @@ URL.revokeObjectURL(group.src);
 
 }
 
-group.src=resolvedSrc;
+group.src=resolved;
 
-}
+}).catch(err=>{
 
-}).catch(err=>console.error(
-'Gagal memuat video gift:',
-err
-));
+console.error('Resolusi video gift gagal:',err);
 
-const finishCombo=async()=>{
+});
 
-const finishingRevision=group.revision;
+/* TUTUP COMBO */
+
+async function finishCombo(){
+
+const revision=group.revision;
 
 await group.videoPromise;
 
 if(
 giftComboGroups.get(key)!==group||
-group.revision!==finishingRevision
-)return;
+group.revision!==revision
+){
+return;
+}
 
 giftComboGroups.delete(key);
 
@@ -1508,9 +1418,16 @@ group.src,
 Math.max(1,group.count)
 );
 
+}else{
+
+console.warn(
+'Video gift tidak ditemukan:',
+data.giftId||data.giftTitle
+);
+
 }
 
-};
+}
 
 const comboEnded=
 data.repeatEnd===true||
@@ -1520,12 +1437,14 @@ data.combo_end===true;
 
 group.timer=setTimeout(
 finishCombo,
-comboEnded?0:900
+comboEnded?0:COMBO_DELAY
 );
 
 }
 
-/* BROADCAST CHANNEL */
+/* =========================================
+   BROADCAST CHANNEL
+========================================= */
 
 function handleIncomingMessage(data){
 
@@ -1606,25 +1525,17 @@ else if(data.type==='PLAY_GIFT'){
 
 const targetSlot=Number(data.targetSlot);
 
-if(targetSlot&&slotPoints[targetSlot]!==undefined){
+if(
+targetSlot>=1&&
+targetSlot<=8
+){
 
 slotPoints[targetSlot]+=Number(data.increment||0);
 
-const countElem=$(`coincount-slot-${targetSlot}`);
+$(`coincount-slot-${targetSlot}`).innerText=
+formatPoin(slotPoints[targetSlot]);
 
-if(countElem){
-
-countElem.innerText=formatPoin(
-slotPoints[targetSlot]
-);
-
-}
-
-const badge=$(`coin-badge-${targetSlot}`);
-
-if(badge){
-badge.style.display='flex';
-}
+$(`coin-badge-${targetSlot}`).style.display='flex';
 
 }
 
@@ -1647,7 +1558,9 @@ channel.onmessage=event=>{
 handleIncomingMessage(event.data);
 };
 
-/* WEBSOCKET */
+/* =========================================
+   WEBSOCKET
+========================================= */
 
 let ws=null;
 let reconnectTimer=null;
@@ -1664,7 +1577,9 @@ ws&&
 ws.readyState===WebSocket.CONNECTING||
 ws.readyState===WebSocket.OPEN
 )
-)return;
+){
+return;
+}
 
 try{
 
@@ -1676,7 +1591,9 @@ ws=new WebSocket(
 );
 
 ws.onopen=()=>{
+
 reconnectDelay=1000;
+
 };
 
 ws.onmessage=event=>{
@@ -1691,7 +1608,7 @@ handleIncomingMessage({
 
 type:'PLAY_GIFT',
 
-targetSlot:1,
+targetSlot:Number(d.targetSlot)||1,
 
 increment:Number(d.coins||1),
 
@@ -1733,7 +1650,11 @@ d.video_url||
 
 }
 
-}catch(err){}
+}catch(err){
+
+console.error('WebSocket message error:',err);
+
+}
 
 };
 
@@ -1774,21 +1695,276 @@ reconnectDelay
 
 connectWebSocket();
 
-/* RENDERER VIDEO GIFT */
+/* =========================================
+   WEBGL RENDERER
+========================================= */
 
+let gl=null;
+let glProgram=null;
+let glTexture=null;
+let glBuffers={};
 let glReady=false;
-let renderActive=false;
-let renderFrameId=null;
-let videoFrameCallbackId=null;
-let lastVideoTime=-1;
-let giftVideoGeneration=0;
-let activeFinishHandler=null;
+
+let canvas2D=null;
 
 const giftCanvas=$('giftCanvas');
 const giftVideo=$('giftVideo');
 const giftOverlay=$('giftOverlayContainer');
 
-let canvas2D=null;
+let renderActive=false;
+let renderFrameId=null;
+let videoFrameCallbackId=null;
+let lastVideoTime=-1;
+
+function initWebGL(canvas){
+
+if(glReady&&gl&&glProgram&&glTexture){
+return true;
+}
+
+try{
+
+gl=canvas.getContext('webgl',{
+alpha:true,
+premultipliedAlpha:false,
+antialias:true,
+depth:false,
+stencil:false,
+preserveDrawingBuffer:false,
+powerPreference:'high-performance'
+});
+
+if(!gl)return false;
+
+const vertexSource=`
+
+attribute vec2 a_pos;
+attribute vec2 a_tex;
+
+varying vec2 v_tex;
+
+void main(){
+
+gl_Position=vec4(a_pos,0.0,1.0);
+
+v_tex=a_tex;
+
+}
+
+`;
+
+const fragmentSource=`
+
+precision mediump float;
+
+uniform sampler2D u_tex;
+
+varying vec2 v_tex;
+
+void main(){
+
+vec4 c=texture2D(u_tex,v_tex);
+
+float maxRB=max(c.r,c.b);
+
+float gDiff=c.g-maxRB;
+
+float maxC=max(c.r,max(c.g,c.b));
+
+float greenAmount=smoothstep(
+0.08,
+0.28,
+gDiff
+);
+
+float blackAmount=1.0-smoothstep(
+0.025,
+0.085,
+maxC
+);
+
+float alpha=1.0-max(
+greenAmount,
+blackAmount
+);
+
+if(gDiff>0.0&&c.g>maxRB){
+
+float spill=clamp(
+gDiff*1.8,
+0.0,
+0.75
+);
+
+c.g=mix(c.g,maxRB,spill);
+
+}
+
+c.a=alpha;
+
+gl_FragColor=c;
+
+}
+
+`;
+
+function createShader(type,source){
+
+const shader=gl.createShader(type);
+
+gl.shaderSource(shader,source);
+
+gl.compileShader(shader);
+
+if(!gl.getShaderParameter(shader,gl.COMPILE_STATUS)){
+
+console.error(
+'Shader error:',
+gl.getShaderInfoLog(shader)
+);
+
+gl.deleteShader(shader);
+
+return null;
+
+}
+
+return shader;
+
+}
+
+const vertexShader=createShader(
+gl.VERTEX_SHADER,
+vertexSource
+);
+
+const fragmentShader=createShader(
+gl.FRAGMENT_SHADER,
+fragmentSource
+);
+
+if(!vertexShader||!fragmentShader){
+return false;
+}
+
+glProgram=gl.createProgram();
+
+gl.attachShader(glProgram,vertexShader);
+gl.attachShader(glProgram,fragmentShader);
+
+gl.linkProgram(glProgram);
+
+gl.deleteShader(vertexShader);
+gl.deleteShader(fragmentShader);
+
+if(!gl.getProgramParameter(glProgram,gl.LINK_STATUS)){
+
+console.error(
+'Program error:',
+gl.getProgramInfoLog(glProgram)
+);
+
+return false;
+
+}
+
+glBuffers.pos=gl.createBuffer();
+
+gl.bindBuffer(
+gl.ARRAY_BUFFER,
+glBuffers.pos
+);
+
+gl.bufferData(
+gl.ARRAY_BUFFER,
+new Float32Array([
+-1,-1,
+1,-1,
+-1,1,
+-1,1,
+1,-1,
+1,1
+]),
+gl.STATIC_DRAW
+);
+
+glBuffers.tex=gl.createBuffer();
+
+gl.bindBuffer(
+gl.ARRAY_BUFFER,
+glBuffers.tex
+);
+
+gl.bufferData(
+gl.ARRAY_BUFFER,
+new Float32Array([
+0,1,
+1,1,
+0,0,
+0,0,
+1,1,
+1,0
+]),
+gl.STATIC_DRAW
+);
+
+glTexture=gl.createTexture();
+
+gl.bindTexture(
+gl.TEXTURE_2D,
+glTexture
+);
+
+gl.texParameteri(
+gl.TEXTURE_2D,
+gl.TEXTURE_WRAP_S,
+gl.CLAMP_TO_EDGE
+);
+
+gl.texParameteri(
+gl.TEXTURE_2D,
+gl.TEXTURE_WRAP_T,
+gl.CLAMP_TO_EDGE
+);
+
+gl.texParameteri(
+gl.TEXTURE_2D,
+gl.TEXTURE_MIN_FILTER,
+gl.LINEAR
+);
+
+gl.texParameteri(
+gl.TEXTURE_2D,
+gl.TEXTURE_MAG_FILTER,
+gl.LINEAR
+);
+
+gl.useProgram(glProgram);
+
+gl.uniform1i(
+gl.getUniformLocation(glProgram,'u_tex'),
+0
+);
+
+glReady=true;
+
+return true;
+
+}catch(e){
+
+console.error('WebGL tidak tersedia:',e);
+
+glReady=false;
+
+return false;
+
+}
+
+}
+
+/* =========================================
+   STOP RENDERER
+========================================= */
 
 function stopGiftRenderer(){
 
@@ -1797,6 +1973,7 @@ renderActive=false;
 if(renderFrameId!==null){
 
 cancelAnimationFrame(renderFrameId);
+
 renderFrameId=null;
 
 }
@@ -1815,6 +1992,10 @@ videoFrameCallbackId
 videoFrameCallbackId=null;
 
 }
+
+/* =========================================
+   RENDER FRAME
+========================================= */
 
 function renderGiftFrame(){
 
@@ -1868,7 +2049,11 @@ gl.TRIANGLES,
 6
 );
 
-}catch(e){}
+}catch(e){
+
+console.error('Render WebGL error:',e);
+
+}
 
 }else if(canvas2D){
 
@@ -1882,15 +2067,15 @@ giftCanvas.width,
 giftCanvas.height
 );
 
-}catch(e){}
+}catch(e){
+
+console.error('Render canvas error:',e);
 
 }
 
-if(!giftOverlay.classList.contains('visible')){
+}
 
 giftOverlay.classList.add('visible');
-
-}
 
 }
 
@@ -1927,7 +2112,9 @@ renderGiftFrame();
 
 }
 
-/* PUTAR VIDEO GIFT */
+/* =========================================
+   PLAY VIDEO GIFT
+========================================= */
 
 function playGiftVideo(src,onFinished){
 
@@ -1939,6 +2126,7 @@ const generation=++giftVideoGeneration;
 
 let finished=false;
 let safetyTimer=null;
+let loadTimer=null;
 
 stopGiftRenderer();
 
@@ -1950,11 +2138,12 @@ if(finished)return;
 
 finished=true;
 
-activeFinishHandler=null;
-
 clearTimeout(safetyTimer);
+clearTimeout(loadTimer);
 
 if(generation!==giftVideoGeneration)return;
+
+activeFinishHandler=null;
 
 overlay.classList.remove('visible');
 
@@ -1966,9 +2155,12 @@ stopGiftRenderer();
 
 overlay.style.display='none';
 
+overlay.classList.remove('video-fallback');
+
 video.onended=null;
 video.onerror=null;
 video.onloadedmetadata=null;
+video.oncanplay=null;
 
 try{
 
@@ -1983,11 +2175,12 @@ video.load();
 
 }catch(e){}
 
-if(gl){
+if(glReady&&gl){
 
 try{
 
 gl.clearColor(0,0,0,0);
+
 gl.clear(gl.COLOR_BUFFER_BIT);
 
 }catch(e){}
@@ -2015,7 +2208,7 @@ if(typeof onFinished==='function'){
 onFinished();
 }
 
-},200);
+},150);
 
 }
 
@@ -2023,6 +2216,7 @@ activeFinishHandler=finish;
 
 overlay.style.display='block';
 overlay.classList.remove('visible');
+overlay.classList.remove('video-fallback');
 
 try{
 
@@ -2034,14 +2228,16 @@ video.load();
 
 }catch(e){}
 
-video.src=src;
+/* AUDIO VIDEO GIFT AKTIF */
+
 video.muted=false;
 video.volume=1;
 
-setHostVolume();
+video.playsInline=true;
 
-video.onended=finish;
-video.onerror=finish;
+video.src=src;
+
+/* SIAPKAN RENDERER */
 
 glReady=initWebGL(canvas);
 
@@ -2049,20 +2245,47 @@ canvas2D=null;
 
 if(!glReady){
 
-try{
-canvas2D=canvas.getContext('2d');
-}catch(e){}
+/*
+Jika WebGL gagal, jangan mencoba mengambil
+context 2D setelah context WebGL berhasil dibuat.
+Tampilkan video langsung sebagai fallback.
+*/
+
+overlay.classList.add('video-fallback');
 
 }
 
-/* TIMER KESELAMATAN DIMULAI SAAT VIDEO BENAR-BENAR MULAI */
+/* VIDEO ERROR */
+
+video.onerror=()=>{
+
+console.error(
+'Video gift gagal dimuat:',
+src
+);
+
+finish();
+
+};
+
+/* VIDEO SELESAI */
+
+video.onended=()=>{
+
+finish();
+
+};
+
+/* VIDEO SIAP */
 
 video.onloadedmetadata=async()=>{
 
 if(
 finished||
 generation!==giftVideoGeneration
-)return;
+){
+return;
+}
 
 const originalWidth=video.videoWidth||1080;
 const originalHeight=video.videoHeight||1920;
@@ -2150,18 +2373,7 @@ gl.clearColor(0,0,0,0);
 
 gl.clear(gl.COLOR_BUFFER_BIT);
 
-}else if(canvas2D){
-
-canvas2D.clearRect(
-0,
-0,
-renderWidth,
-renderHeight
-);
-
 }
-
-lastVideoTime=-1;
 
 try{
 
@@ -2173,28 +2385,41 @@ await video.play();
 if(
 finished||
 generation!==giftVideoGeneration
-)return;
+){
+return;
+}
 
-/* TAMPILKAN OVERLAY LANGSUNG SETELAH VIDEO MULAI */
+/* TAMPILKAN OVERLAY SAAT VIDEO SUDAH MULAI */
+
 overlay.classList.add('visible');
+
+if(glReady&&gl){
 
 renderActive=true;
 
 renderGiftFrame();
 
+}
+
+/* FALLBACK VIDEO LANGSUNG TAMPIL */
+
 if(video.duration&&Number.isFinite(video.duration)){
 
 safetyTimer=setTimeout(()=>{
 
-if(!finished)finish();
+if(!finished){
+finish();
+}
 
-},(video.duration*1000)+3000);
+},video.duration*1000+5000);
 
 }else{
 
 safetyTimer=setTimeout(()=>{
 
-if(!finished)finish();
+if(!finished){
+finish();
+}
 
 },120000);
 
@@ -2202,7 +2427,10 @@ if(!finished)finish();
 
 }catch(err){
 
-console.error('Gagal memutar video gift:',err);
+console.error(
+'Video gift tidak bisa diputar:',
+err
+);
 
 finish();
 
@@ -2210,31 +2438,47 @@ finish();
 
 };
 
+/* TIMER LOADING */
+
+loadTimer=setTimeout(()=>{
+
+if(
+!finished&&
+video.readyState<video.HAVE_CURRENT_DATA
+){
+
+console.warn(
+'Video gift terlalu lama loading:',
+src
+);
+
+finish();
+
+}
+
+},GIFT_LOAD_TIMEOUT);
+
 video.load();
 
 }
 
-/* CLEANUP */
-
-function releaseHostObjectURL(){
-
-if(hostMediaObjectURL){
-
-URL.revokeObjectURL(hostMediaObjectURL);
-
-hostMediaObjectURL=null;
-
-}
-
-}
+/* =========================================
+   CLEANUP
+========================================= */
 
 window.addEventListener('pagehide',()=>{
 
-manuallyClosed=true;
+giftVideoGeneration++;
+
+clearTimeout(giftQueueTimer);
+
+clearTimeout(reconnectTimer);
 
 stopGiftRenderer();
 
 stopHostSeamlessLoop();
+
+manuallyClosed=true;
 
 if(ws){
 
@@ -2244,21 +2488,19 @@ ws=null;
 
 }
 
-clearTimeout(reconnectTimer);
-
 for(const timer of Object.values(badgeTimers)){
-
 clearTimeout(timer);
-
 }
 
 for(const group of giftComboGroups.values()){
 
 clearTimeout(group.timer);
 
-if(group.src?.startsWith('blob:')){
+if(group.src&&group.src.startsWith('blob:')){
 
+try{
 URL.revokeObjectURL(group.src);
+}catch(e){}
 
 }
 
@@ -2270,7 +2512,9 @@ giftVideoQueue.forEach(item=>{
 
 if(item.isBlob){
 
+try{
 URL.revokeObjectURL(item.src);
+}catch(e){}
 
 }
 
