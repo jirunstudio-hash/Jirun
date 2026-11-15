@@ -1,7 +1,7 @@
 {
-  "name": "nusantara-live",
+  "name": "tiktok-live-studio",
   "version": "1.0.0",
-  "description": "Control dan Display TikTok Live melalui WebSocket",
+  "description": "TikTok Live Studio WebSocket Server",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
