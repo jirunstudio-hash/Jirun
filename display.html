@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="id">
 <head>
@@ -25,36 +26,53 @@ color:#fff;
 body{
 display:flex;
 justify-content:center;
-align-items:center;
+align-items:flex-start;
 }
 
 .phone-screen{
 width:100vw;
 height:100vh;
-max-width:440px;
+max-width:none;
 position:relative;
 overflow:hidden;
-display:flex;
-flex-direction:column;
+display:block;
 background:#000;
-padding:8px 6px 45px;
+padding:4.4vh 1vw 0;
 }
+
+/* LAYOUT POTRET HOST + 8 PERMINTAAN */
+
+.display-grid{
+width:100%;
+height:54vh;
+min-height:320px;
+max-height:860px;
+display:grid;
+grid-template-columns:minmax(0,1fr) minmax(0,1fr);
+gap:6px;
+position:relative;
+z-index:2;
+}
+
+/* KOTAK HOST BESAR */
 
 .host-fullscreen{
 position:relative;
 width:100%;
-aspect-ratio:16 / 10;
-flex-shrink:0;
+height:100%;
+aspect-ratio:auto;
+min-width:0;
+min-height:0;
 z-index:2;
-background:#292c34;
-border:1px solid #168cff;
-border-radius:12px;
+background:#202020;
+border:0;
+border-radius:14px;
 overflow:hidden;
 cursor:pointer;
 display:flex;
 justify-content:center;
 align-items:center;
-animation:hostBlueBlink 1.4s ease-in-out infinite;
+animation:none;
 }
 
 @keyframes hostBlueBlink{
@@ -142,34 +160,42 @@ image-rendering:-webkit-optimize-contrast;
 z-index:2;
 }
 
+/* AREA 8 KOTAK PERMINTAAN */
+
 .live-layout{
 position:relative;
 z-index:10;
 width:100%;
-padding:8px 0;
+height:100%;
+min-width:0;
+min-height:0;
+padding:0;
+grid-column:2;
+grid-row:1;
 pointer-events:none;
 }
 
-/* =========================================
-   GRID KOTAK TIKTOK LIVE
-========================================= */
-
 .komal-grid{
 width:100%;
+height:100%;
 display:grid;
-grid-template-columns:repeat(4,minmax(0,1fr));
+grid-template-columns:repeat(2,minmax(0,1fr));
+grid-template-rows:repeat(4,minmax(0,1fr));
 gap:6px;
 pointer-events:auto;
 }
 
-/* Tampilan dasar kotak */
+/* KOTAK PERMINTAAN */
+
 .slot-box{
 width:100%;
-aspect-ratio:1 / 1.06;
-background:
-linear-gradient(145deg,#24252d 0%,#191a21 55%,#15161c 100%);
-border:1px solid rgba(255,255,255,.13);
-border-radius:9px;
+height:100%;
+min-width:0;
+min-height:0;
+aspect-ratio:auto;
+background:#242424;
+border:0;
+border-radius:14px;
 position:relative;
 overflow:hidden;
 display:flex;
@@ -177,16 +203,13 @@ flex-direction:column;
 align-items:center;
 justify-content:center;
 contain:layout paint;
-box-shadow:
-0 2px 5px rgba(0,0,0,.35),
-inset 0 1px 0 rgba(255,255,255,.035);
+box-shadow:none;
 transition:
 border-color .2s ease,
 background .2s ease,
 box-shadow .2s ease;
 }
 
-/* Kotak ketika member memiliki foto */
 .slot-box.has-photo{
 background:#191a21;
 border:1px solid rgba(255,255,255,.20);
@@ -196,7 +219,6 @@ inset 0 0 0 1px rgba(255,255,255,.025);
 animation:none!important;
 }
 
-/* Background blur foto */
 .slot-bg-blur{
 position:absolute!important;
 inset:-8px!important;
@@ -209,7 +231,6 @@ z-index:1;
 pointer-events:none;
 }
 
-/* Lapisan gelap foto */
 .slot-bg-overlay{
 position:absolute;
 inset:0;
@@ -224,7 +245,8 @@ z-index:2;
 pointer-events:none;
 }
 
-/* Ikon tambah */
+/* IKON TAMBAH */
+
 .slot-plus-svg{
 width:25px;
 height:25px;
@@ -235,7 +257,8 @@ z-index:3;
 margin-bottom:6px;
 }
 
-/* Tulisan permintaan */
+/* TULISAN PERMINTAAN */
+
 .slot-req{
 color:#b8bbc5;
 font-size:.70rem;
@@ -245,7 +268,8 @@ z-index:3;
 text-shadow:0 1px 3px rgba(0,0,0,.8);
 }
 
-/* Foto profil tanpa garis putih */
+/* FOTO PROFIL */
+
 .slot-circle-img{
 width:56px;
 height:56px;
@@ -261,7 +285,8 @@ border:none!important;
 box-shadow:none!important;
 }
 
-/* Badge koin */
+/* BADGE KOIN */
+
 .slot-coin-badge{
 position:absolute;
 top:5px;
@@ -293,7 +318,6 @@ overflow:hidden;
 box-shadow:0 0 0 1px rgba(255,255,255,.2);
 }
 
-/* Bintang sedikit lebih besar */
 .star-svg{
 width:100%;
 height:100%;
@@ -318,7 +342,8 @@ line-height:1;
 white-space:nowrap;
 }
 
-/* Badge gift */
+/* BADGE GIFT */
+
 .slot-top-badge{
 position:absolute;
 top:5px;
@@ -338,7 +363,8 @@ animation:popGiftBadge .3s ease-out;
 100%{transform:scale(1);opacity:1}
 }
 
-/* Label nama member */
+/* NAMA MEMBER */
+
 .slot-name-pill{
 position:absolute;
 bottom:5px;
@@ -383,7 +409,8 @@ width:7px;
 height:7px;
 }
 
-/* Ikon mikrofon tanpa kotak atau lingkaran */
+/* MIKROFON */
+
 .mic-container{
 position:absolute;
 bottom:5px;
@@ -409,12 +436,14 @@ filter:drop-shadow(0 1px 2px rgba(0,0,0,.7));
 }
 
 .mic-icon-svg .mic-body{fill:#fff}
+
 .mic-icon-svg .mic-slash-bg{
 stroke:#000;
 stroke-width:4.6;
 stroke-linecap:round;
 display:block;
 }
+
 .mic-icon-svg .mic-slash{
 stroke:#fff;
 stroke-width:2.6;
@@ -422,28 +451,42 @@ stroke-linecap:round;
 display:block;
 filter:drop-shadow(0 1px 2px rgba(0,0,0,.95));
 }
+
 .mic-container.is-unmuted .mic-icon-svg .mic-slash,
 .mic-container.is-unmuted .mic-icon-svg .mic-slash-bg{
 display:none;
 }
+
 .mic-container.is-muted{
 background:transparent!important;
 border:none!important;
 box-shadow:none!important;
 }
 
-/* Tampilan layar kecil */
+/* RESPONSIVE */
+
 @media(max-width:360px){
+.display-grid{
+gap:5px;
+}
+
 .komal-grid{
 gap:5px;
 }
+
 .slot-box{
-border-radius:8px;
+border-radius:10px;
 }
+
+.host-fullscreen{
+border-radius:10px;
+}
+
 .slot-circle-img{
 width:48px;
 height:48px;
 }
+
 .slot-name-text{
 max-width:48px;
 font-size:9px;
@@ -455,6 +498,8 @@ font-size:9px;
 <body>
 <div class="phone-screen" id="displayContainer">
 
+<div class="display-grid">
+
 <div class="host-fullscreen" id="hostBox" onclick="handleHostBoxClick()">
 
 <div id="unmuteHint" class="unmute-hint">🔊 Ketuk untuk nyalakan suara</div>
@@ -465,14 +510,16 @@ font-size:9px;
 
 </div>
 
+<div class="live-layout">
+<div class="komal-grid" id="komalGrid"></div>
+</div>
+
+</div>
+
 <div class="gift-overlay" id="giftOverlayContainer">
 <div class="gift-bottom-backdrop"></div>
 <video id="giftVideo" playsinline webkit-playsinline muted crossorigin="anonymous" preload="auto"></video>
 <canvas id="giftCanvas"></canvas>
-</div>
-
-<div class="live-layout">
-<div class="komal-grid" id="komalGrid"></div>
 </div>
 
 </div>
@@ -498,9 +545,7 @@ let giftVideoQueueBusy = false;
 const $ = id => document.getElementById(id);
 const komalGrid = $('komalGrid');
 
-/* =========================================
-   PENGATURAN VOLUME OTOMATIS HOST
-========================================= */
+/* PENGATURAN VOLUME HOST */
 
 const HOST_VOLUME_NORMAL = 1.0;
 const HOST_VOLUME_DURING_GIFT = 0.5;
@@ -534,9 +579,7 @@ return giftVolumeDucked
 :HOST_VOLUME_NORMAL;
 }
 
-/* =========================================
-   BUAT 8 SLOT
-========================================= */
+/* BUAT 8 SLOT */
 
 for(let i=1;i<=8;i++){
 slotPoints[i]=0;
@@ -583,10 +626,7 @@ komalGrid.insertAdjacentHTML('beforeend',`
 `);
 }
 
-/* =========================================
-   KLIK HOST BESAR
-   HANYA UNTUK MENYALAKAN SUARA VIDEO
-========================================= */
+/* KLIK HOST UNTUK SUARA */
 
 function handleHostBoxClick(){
 if(!hostLoopActive)return;
@@ -635,9 +675,7 @@ mic.classList.toggle('is-unmuted',!Boolean(status));
 mic.title=status?'Mikrofon dimatikan (Muted)':'Mikrofon aktif';
 }
 
-/* =========================================
-   LOOP VIDEO HOST BESAR
-========================================= */
+/* LOOP VIDEO HOST */
 
 function setupSeamlessHostVideo(url){
 stopHostSeamlessLoop();
@@ -770,9 +808,7 @@ v.style.display='none';
 });
 }
 
-/* =========================================
-   WEBGL VIDEO GIFT
-========================================= */
+/* WEBGL VIDEO GIFT */
 
 let gl=null;
 let glProgram=null;
@@ -893,9 +929,7 @@ return false;
 }
 }
 
-/* =========================================
-   DATABASE ASSETS
-========================================= */
+/* DATABASE ASSETS */
 
 const DB_NAME="TikTokStudioStorageDB";
 const STORE_NAME="permanent_assets";
@@ -944,9 +978,7 @@ if(number>=1000)return(number/1000).toFixed(1)+'K';
 return Math.floor(number).toString();
 }
 
-/* =========================================
-   UPDATE SLOT
-========================================= */
+/* UPDATE SLOT */
 
 function updateSlotDisplay(data){
 const{slotNum,nameInput,initialPoin,profileImg,action}=data;
@@ -1068,9 +1100,7 @@ delete badgeTimers[slotNum];
 },5000);
 }
 
-/* =========================================
-   ANTRIAN VIDEO GIFT
-========================================= */
+/* ANTRIAN VIDEO GIFT */
 
 function queueGiftVideo(src,repeatCount=1){
 if(!src)return;
@@ -1203,9 +1233,7 @@ data.combo_end===true;
 group.timer=setTimeout(finishCombo,comboEnded?0:900);
 }
 
-/* =========================================
-   BROADCAST CHANNEL
-========================================= */
+/* BROADCAST CHANNEL */
 
 function handleIncomingMessage(data){
 if(!data)return;
@@ -1281,9 +1309,7 @@ receiveGiftForCombo(data);
 
 channel.onmessage=event=>handleIncomingMessage(event.data);
 
-/* =========================================
-   WEBSOCKET
-========================================= */
+/* WEBSOCKET */
 
 let ws=null;
 let reconnectTimer=null;
@@ -1350,9 +1376,7 @@ reconnectTimer=setTimeout(connectWebSocket,reconnectDelay);
 
 connectWebSocket();
 
-/* =========================================
-   RENDERER VIDEO GIFT
-========================================= */
+/* RENDERER VIDEO GIFT */
 
 let glReady=false;
 let renderActive=false;
@@ -1437,9 +1461,7 @@ renderGiftFrame();
 }
 }
 
-/* =========================================
-   PUTAR VIDEO GIFT + TURUNKAN VOLUME HOST
-========================================= */
+/* PUTAR VIDEO GIFT + TURUNKAN VOLUME HOST */
 
 function playGiftVideo(src,onFinished){
 const video=giftVideo;
@@ -1613,9 +1635,7 @@ finish();
 video.load();
 }
 
-/* =========================================
-   CLEANUP
-========================================= */
+/* CLEANUP */
 
 function releaseHostObjectURL(){
 if(hostMediaObjectURL){
